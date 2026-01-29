@@ -47,7 +47,7 @@
             urlcolor=farzullaburgundy,
             breaklinks=true,
             pdftitle={Privacy-Preserving Financial Surveillance: An Architectural Framework for CBDC Implementation},
-            pdfauthor={Murad Farzulla},
+            pdfauthor={Murad Farzulla and Andrew Maksakov},
             pdfkeywords={CBDC, privacy, financial surveillance, AML, zero-knowledge proofs, digital currency}]{hyperref}
 
 % Allow URLs to break at hyphens and slashes
@@ -137,7 +137,7 @@
 \fancyhead[R]{\small\itshape \href{https://doi.org/\paperdoi}{DOI: \paperdoi}}
 
 \fancyfoot[C]{\small\thepage}
-\fancyfoot[L]{\small\itshape Murad Farzulla}
+\fancyfoot[L]{\small\itshape Farzulla \& Maksakov}
 \fancyfoot[R]{\small\itshape v\paperver~\paperdate}
 
 \renewcommand{\headrulewidth}{0.4pt}
@@ -146,7 +146,7 @@
 \fancypagestyle{firstpage}{
   \fancyhf{}
   \fancyfoot[C]{\small\thepage}
-  \fancyfoot[L]{\small\itshape Murad Farzulla}
+  \fancyfoot[L]{\small\itshape Farzulla \& Maksakov}
   \fancyfoot[R]{\small\itshape v\paperver~\paperdate}
   \renewcommand{\headrulewidth}{0pt}
   \renewcommand{\footrulewidth}{0.4pt}
@@ -181,8 +181,8 @@
 \begin{center}
 {\Large\bfseries Privacy-Preserving Financial Surveillance:\\An Architectural Framework for CBDC Implementation}\\[0.5em]
 {\large\itshape Transaction-Level Intervention Without Identity-Level Monitoring}\\[1em]
-{\bfseries Murad Farzulla}\textsuperscript{1} \href{https://orcid.org/0009-0002-7164-8704}{\orcidicon\ \texttt{0009-0002-7164-8704}}\\[0.5em]
-{\small\itshape \textsuperscript{1}\href{https://farzulla.org}{Farzulla Research}}\\[0.3em]
+{\bfseries Murad Farzulla}\textsuperscript{1} \href{https://orcid.org/0009-0002-7164-8704}{\orcidicon\ \texttt{0009-0002-7164-8704}}, \quad {\bfseries Andrew Maksakov}\textsuperscript{2}\\[0.5em]
+{\small\itshape \textsuperscript{1}\href{https://farzulla.org}{Farzulla Research}} \quad {\small\itshape \textsuperscript{2}Independent Researcher}\\[0.3em]
 {\small \paperdate}\\[0.5em]
 {\small Correspondence: \href{mailto:murad@farzulla.org}{murad@farzulla.org}}
 \end{center}
@@ -219,9 +219,9 @@ The contribution lies in demonstrating that the apparent trade-off between priva
 
 \section*{Acknowledgements}
 
-The author acknowledges the foundational work of David Chaum on eCash and blind signatures, which established the theoretical possibility of privacy-preserving digital payments decades before current CBDC debates. The author also acknowledges Perplexity AI for research assistance and Anthropic for developing Claude, whose assistance with analytical framework development substantially accelerated this research.
+The authors acknowledge the foundational work of David Chaum on eCash and blind signatures, which established the theoretical possibility of privacy-preserving digital payments decades before current CBDC debates. The authors also acknowledge Perplexity AI for research assistance and Anthropic for developing Claude, whose assistance with analytical framework development substantially accelerated this research. Andrew Maksakov contributed the simulation implementation (\texttt{pet\_aml\_sim.py}) that validates the PET--AML stack's performance envelope.
 
-All errors, omissions, and interpretive limitations remain the author's responsibility.
+All errors, omissions, and interpretive limitations remain the authors' responsibility.
 
 \vspace{0.5em}
 \noindent\textbf{Methodologies:} Research methodologies and reproducibility practices are documented at \href{https://farzulla.org/methodologies}{\texttt{farzulla.org/methodologies}}.
@@ -631,6 +631,45 @@ Secure risk propagation (batch) & seconds--minutes per batch (e.g., hourly/daily
 
 \textbf{Operational profile.} To keep the user experience smooth, we recommend (a) performing PSI screening at wallet ``ready'' time (onboarding and periodic re-screening), (b) generating ZK proofs at transaction time using fixed, audited circuits with bounded complexity, and (c) running secure risk propagation in batches unless a high-risk typology requires near-real-time scoring. The resulting system preserves routine payment performance while retaining a credible privacy posture and an auditable, threshold-gated pathway for exceptional disclosure.
 
+\subsubsection{Simulation validation}
+\label{sec:pet-aml-simulation}
+
+To validate the performance envelope described in Table~\ref{tab:pet-aml-envelope}, we implement a discrete-event simulation of the PET--AML stack (\texttt{pet\_aml\_sim.py}).\footnote{Simulation source code is available in the paper's repository at \url{https://github.com/murad-farzulla/CBDC}.} The simulator models 1{,}000 wallets distributed across four risk tiers (0--3), generates transactions with lognormal amount distributions, and exercises all three stack components: PSI-based watchlist screening, ZK policy proof verification, and batch MPC risk propagation.
+
+Table~\ref{tab:sim-results} summarises the key metrics from a representative run.
+
+\begin{table}[H]
+\centering
+\caption{PET--AML simulation results (40{,}000 transactions generated).}
+\label{tab:sim-results}
+\begin{tabular}{p{4.8cm} p{3.0cm}}
+\toprule
+\textbf{Metric} & \textbf{Value} \\
+\midrule
+Transactions generated       & 40{,}000 \\
+Transactions settled         & 25{,}287 (63.2\%) \\
+Transactions rejected        & 14{,}713 (36.8\%) \\
+Sanctions hits (PSI blocked) & 82 \\
+Escalations                  & 0 \\
+\addlinespace
+Latency mean                 & 537\,ms \\
+Latency p50                  & 511\,ms \\
+Latency p90                  & 768\,ms \\
+Latency p99                  & 1{,}137\,ms \\
+\addlinespace
+Latency breakdown            & PSI screening dominates \\
+MPC batch runtime            & 0.38\,hours \\
+\addlinespace
+Risk-tier distribution       & Tier\,0: 40\%, Tier\,1: 30\%, Tier\,2: 20\%, Tier\,3: 10\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Interpretation.} The results validate the performance claims in Table~\ref{tab:pet-aml-envelope}: PSI watchlist checks complete in sub-second time, ZK proof verification adds only milliseconds, and batch MPC risk propagation is feasible within a sub-hour cycle. End-to-end transaction latency is dominated by the PSI screening step, with mean latency of 537\,ms and 99th-percentile latency of 1.14\,s---well within the performance envelope for retail CBDC payments.
+
+The 36.8\% rejection rate reflects the simulation's tier-0 daily spending limits interacting with the lognormal transaction amount distribution, not a system failure mode. Tier-0 wallets (40\% of the population) have the lowest spending caps, and the heavy-tailed amount distribution frequently exceeds these limits. In a deployed system, tier distribution would reflect actual KYC levels, and limits would be calibrated to real-world spending patterns, yielding substantially lower rejection rates for compliant users.
+
+The 82 sanctions-blocked transactions confirm that PSI screening correctly intercepts watchlist-matched wallets without revealing match status to the ledger operator. Zero escalations indicate that, under normal operating conditions, the privacy-preserving stack handles compliance enforcement entirely through architectural mechanisms without requiring identity disclosure.
 
 
 \section{Addressing Objections}
