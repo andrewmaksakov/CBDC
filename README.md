@@ -4,6 +4,8 @@
 
 Murad Farzulla — [Farzulla Research](https://farzulla.org) — [ORCID](https://orcid.org/0009-0002-7164-8704)
 
+Andrew Maksakov — Research Assistant & Technical Engineer 
+
 **DOI:** [10.5281/zenodo.17917938](https://doi.org/10.5281/zenodo.17917938)
 
 ## Abstract
