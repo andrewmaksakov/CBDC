@@ -1,0 +1,34 @@
+# LaTeX build artifacts
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.synctex.gz
+*.synctex(busy)
+*.toc
+*.lof
+*.lot
+*.nav
+*.snm
+*.vrb
+*.bcf
+*.run.xml
+*.xdv
+
+# PDF output (rebuild from source)
+*.pdf
+
+# Editor files
+*.swp
+*.swo
+*~
+.vscode/
+*.sublime-*
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini

@@ -1,0 +1,794 @@
+\documentclass[11pt,twocolumn]{article}
+
+% ============================================================================
+% PACKAGE IMPORTS
+% ============================================================================
+
+% Page geometry and layout
+\usepackage[a4paper, margin=1in]{geometry}
+\usepackage{setspace}
+
+% Fonts and typography
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+% Graphics and figures
+\usepackage{graphicx}
+\usepackage{float}
+
+% Tables
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{longtable}
+
+% Math packages
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+
+% Bibliography
+\usepackage[round,authoryear]{natbib}
+\bibliographystyle{plainnat}
+
+% Colors
+\usepackage{xcolor}
+\definecolor{farzullaburgundy}{RGB}{128,0,32}
+\definecolor{zenodoblue}{RGB}{0,123,255}
+\definecolor{orcidgreen}{RGB}{166,206,57}
+
+% Colored boxes
+\usepackage{tcolorbox}
+
+% Hyperlinks and PDF metadata
+\usepackage{url}
+\usepackage[colorlinks=true,
+            linkcolor=farzullaburgundy,
+            citecolor=farzullaburgundy,
+            urlcolor=farzullaburgundy,
+            breaklinks=true,
+            pdftitle={Privacy-Preserving Financial Surveillance: An Architectural Framework for CBDC Implementation},
+            pdfauthor={Murad Farzulla},
+            pdfkeywords={CBDC, privacy, financial surveillance, AML, zero-knowledge proofs, digital currency}]{hyperref}
+
+% Allow URLs to break at hyphens and slashes
+\def\UrlBreaks{\do\/\do-\do_}
+\expandafter\def\expandafter\UrlBreaks\expandafter{\UrlBreaks\do\a\do\b\do\c\do\d\do\e\do\f\do\g\do\h\do\i\do\j\do\k\do\l\do\m\do\n\do\o\do\p\do\q\do\r\do\s\do\t\do\u\do\v\do\w\do\x\do\y\do\z}
+
+% ORCID icon support
+\usepackage{tikz}
+\usepackage{scalerel}
+
+% Footer customization
+\usepackage{fancyhdr}
+
+% Absolute positioning for corner logos
+\usepackage{eso-pic}
+
+% ============================================================================
+% CUSTOM LOGO COMMANDS
+% ============================================================================
+
+% ORCID icon (clickable green circle with iD mark)
+\newcommand{\orcidicon}{\scalerel*{
+    \begin{tikzpicture}[x=3ex,y=3ex]
+    \draw[fill=orcidgreen] (0,0) circle (0.5);
+    \draw[white,line width=0.08ex] (0,0.15) -- (0,0.3);
+    \draw[white,line width=0.08ex] (-0.15,0) -- (-0.3,0);
+    \end{tikzpicture}
+}{\textrm{I}}}
+
+% Farzulla Research logo
+\newcommand{\farzullalogo}{%
+    \href{https://farzulla.org}{%
+        \includegraphics[height=4ex]{farzulla-logo.pdf}%
+    }%
+}
+
+% Zenodo logo
+\newcommand{\zenodologo}{%
+    \href{https://zenodo.org}{%
+        \includegraphics[height=4ex]{zenodo-logo.pdf}%
+    }%
+}
+
+% ============================================================================
+% VERSION AND PREPRINT BANNER
+% ============================================================================
+
+\newcommand{\paperver}{1.1.0}
+\newcommand{\paperdate}{January 2026}
+\newcommand{\paperdoi}{10.5281/zenodo.17917938}
+
+% ============================================================================
+% METADATA BOX
+% ============================================================================
+
+\newcommand{\metadatabox}[1]{%
+\begin{tcolorbox}[
+    colback=gray!5,
+    colframe=farzullaburgundy,
+    title=Publication Metadata,
+    fonttitle=\bfseries,
+    coltitle=white,
+    colbacktitle=farzullaburgundy,
+    width=\columnwidth,
+    arc=2mm,
+    boxrule=0.8pt
+]
+\small
+\textbf{DOI:} \href{https://doi.org/#1}{\texttt{#1}}\\
+\textbf{Version:} \paperver\\
+\textbf{Date:} \paperdate\\
+\textbf{License:} CC-BY-4.0
+\end{tcolorbox}
+}
+
+% ============================================================================
+% HEADER AND FOOTER CONFIGURATION
+% ============================================================================
+
+\newcommand{\shorttitle}{Privacy-Preserving CBDC}
+
+\pagestyle{fancy}
+\fancyhf{}
+
+\fancyhead[L]{\small\itshape \href{https://farzulla.org}{farzulla.org}}
+\fancyhead[C]{\small\itshape $\cdot$}
+\fancyhead[R]{\small\itshape \href{https://doi.org/\paperdoi}{DOI: \paperdoi}}
+
+\fancyfoot[C]{\small\thepage}
+\fancyfoot[L]{\small\itshape Murad Farzulla}
+\fancyfoot[R]{\small\itshape v\paperver~\paperdate}
+
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+
+\fancypagestyle{firstpage}{
+  \fancyhf{}
+  \fancyfoot[C]{\small\thepage}
+  \fancyfoot[L]{\small\itshape Murad Farzulla}
+  \fancyfoot[R]{\small\itshape v\paperver~\paperdate}
+  \renewcommand{\headrulewidth}{0pt}
+  \renewcommand{\footrulewidth}{0.4pt}
+}
+
+% Section spacing and formatting
+\usepackage{titlesec}
+\titlespacing*{\section}{0pt}{1.5ex plus 0.5ex minus 0.2ex}{1ex plus 0.2ex}
+\titlespacing*{\subsection}{0pt}{1.2ex plus 0.4ex minus 0.2ex}{0.8ex plus 0.2ex}
+
+\titleformat{\section}{\normalfont\large\bfseries\color{farzullaburgundy}}{\thesection}{0.5em}{}
+\titleformat{\subsection}{\normalfont\normalsize\bfseries\color{farzullaburgundy}}{\thesubsection}{0.5em}{}
+\titleformat{\subsubsection}{\normalfont\small\bfseries\color{farzullaburgundy}}{\thesubsubsection}{0.5em}{}
+
+% ============================================================================
+% DOCUMENT BODY
+% ============================================================================
+
+\begin{document}
+
+% Single-column frontmatter
+\onecolumn
+\setstretch{1.2}
+
+\thispagestyle{firstpage}
+
+\begin{center}
+{\small\color{farzullaburgundy}\textbf{PREPRINT v\paperver} | \color{gray}Not peer-reviewed}
+\end{center}
+\vspace{0.5em}
+
+\begin{center}
+{\Large\bfseries Privacy-Preserving Financial Surveillance:\\An Architectural Framework for CBDC Implementation}\\[0.5em]
+{\large\itshape Transaction-Level Intervention Without Identity-Level Monitoring}\\[1em]
+{\bfseries Murad Farzulla}\textsuperscript{1} \href{https://orcid.org/0009-0002-7164-8704}{\orcidicon\ \texttt{0009-0002-7164-8704}}\\[0.5em]
+{\small\itshape \textsuperscript{1}\href{https://farzulla.org}{Farzulla Research}}\\[0.3em]
+{\small \paperdate}\\[0.5em]
+{\small Correspondence: \href{mailto:murad@farzulla.org}{murad@farzulla.org}}
+\end{center}
+
+\begin{abstract}
+\noindent Current Central Bank Digital Currency proposals from major economies share a common architectural assumption: that comprehensive transaction surveillance is necessary for financial stability and crime prevention. This paper challenges that assumption by proposing an alternative architecture that achieves 87--95\% of surveillance-based detection effectiveness while preserving complete transactional privacy. Agent-based simulation demonstrates that the remaining performance gap derives entirely from cross-wallet identity linking---a capability achievable through pseudonymous zero-knowledge techniques without surveillance infrastructure. Crucially, watchlist access provides zero marginal detection improvement: the surveillance apparatus adds no value beyond what pseudonymous linking achieves. The proposed framework operates through three mechanisms: (1) anonymized pattern detection that analyzes transaction graph structure without accessing participant identities, (2) transaction-level rather than identity-level intervention that freezes suspicious transactions without affecting users' broader financial access, and (3) opt-in deanonymization for dispute resolution where users voluntarily provide explanations rather than facing automatic investigation.
+
+The proposed framework inverts the burden of proof in financial surveillance. Rather than requiring users to demonstrate legitimacy (the current AML paradigm), it requires the system to demonstrate suspicion before any intervention occurs---and even then, intervention affects only the specific flagged transaction. Users may abandon flagged transactions without deanonymization, with funds returning to sender and no record created linking identity to suspicious patterns. This creates a game-theoretic deterrent: illicit actors cannot complete transactions, but legitimate users experience minimal friction.
+
+We argue that privacy-preserving CBDC architecture is technically feasible using existing cryptographic primitives (zero-knowledge proofs, secure multi-party computation, threshold cryptography) and that the choice to implement surveillance infrastructure represents a policy decision rather than technical necessity. The paper provides architectural specifications, addresses common objections, and proposes governance structures for privacy-preserving digital currency systems. This framework contributes to ongoing debates about CBDC design by demonstrating that the surveillance--security trade-off is a false dichotomy.
+
+\vspace{0.5em}
+\noindent\textbf{Keywords:} central bank digital currency, privacy, financial surveillance, anti-money laundering, zero-knowledge proofs, digital currency architecture, transaction monitoring, opt-in deanonymization
+
+\vspace{0.3em}
+\noindent\textbf{JEL Codes:} E42 (Monetary Systems), E58 (Central Banks and Their Policies), G28 (Government Policy and Regulation), K42 (Illegal Behavior and Enforcement of Law), O33 (Technological Change)
+\end{abstract}
+
+\vspace{1em}
+
+\metadatabox{\paperdoi}
+
+\vspace{1em}
+
+\section*{Research Context}
+
+This work forms part of the Adversarial Systems Research program, which investigates stability, alignment, and friction dynamics in complex systems where competing interests generate structural conflict. The program examines how agents with divergent preferences interact within institutional constraints across multiple domains: political governance, financial markets, human cognitive development, and artificial intelligence alignment.
+
+The unifying framework treats all these domains as adversarial environments where optimal outcomes require balancing competing interests rather than eliminating conflict. In political systems, this manifests as the tension between stakeholder consent and technocratic competence. In financial markets, it appears as the conflict between regulatory stability and market innovation. The privacy-preserving CBDC architecture presented here addresses the specific adversarial dynamic between state surveillance capabilities and citizen financial autonomy.
+
+This paper extends prior work on AML regulatory failures \citep{Farzulla2025AML}, which documented how current frameworks disproportionately target primitive laundering methods while sophisticated actors exploit derivatives, hedging, and offshore structures with impunity. Where that analysis diagnosed the problem---surveillance systems that impose friction on legitimate users while failing to detect sophisticated crime---this paper proposes a solution: architectural enforcement of privacy that achieves superior crime detection through mechanism design rather than comprehensive monitoring.
+
+The contribution lies in demonstrating that the apparent trade-off between privacy and security in digital currency design is a false dichotomy. Privacy-preserving architecture can achieve equivalent or superior crime detection by creating game-theoretic incentives that make illicit transactions structurally impossible to complete, rather than attempting to identify and prosecute illicit actors after the fact.
+
+\section*{Acknowledgements}
+
+The author acknowledges the foundational work of David Chaum on eCash and blind signatures, which established the theoretical possibility of privacy-preserving digital payments decades before current CBDC debates. The author also acknowledges Perplexity AI for research assistance and Anthropic for developing Claude, whose assistance with analytical framework development substantially accelerated this research.
+
+All errors, omissions, and interpretive limitations remain the author's responsibility.
+
+\vspace{0.5em}
+\noindent\textbf{Methodologies:} Research methodologies and reproducibility practices are documented at \href{https://farzulla.org/methodologies}{\texttt{farzulla.org/methodologies}}.
+
+\clearpage
+\tableofcontents
+\thispagestyle{firstpage}
+
+% ============================================================================
+% MAIN BODY
+% ============================================================================
+
+\clearpage
+% Switch to two-column for main body
+\twocolumn
+\setstretch{1.2}
+
+\section{Introduction}
+
+\subsection{The Surveillance Assumption in CBDC Design}
+
+Central Bank Digital Currency proposals from the European Central Bank, Federal Reserve, People's Bank of China, and Bank of England share a common architectural assumption: comprehensive transaction visibility is necessary for financial stability, monetary policy transmission, and crime prevention \citep{BIS2020, ECB2020, Auer2021}. This assumption treats surveillance as a feature rather than a cost, presenting the ability to monitor every transaction as an unambiguous benefit for regulators and society.
+
+The assumption is rarely examined critically. CBDC design documents discuss privacy in terms of ``appropriate balance'' between user privacy and regulatory needs, implicitly accepting that these exist in zero-sum tension \citep{ECB2020}. Privacy protections, where proposed, take the form of policy commitments (``data will only be accessed with appropriate authorization'') rather than architectural guarantees (``the system cannot provide identity information because it does not possess it'').
+
+This paper argues that the surveillance assumption reflects institutional preferences rather than technical necessity. Privacy-preserving CBDC architecture is feasible using cryptographic techniques developed over the past four decades. The question is not whether such systems can be built, but whether there exists political will to build them. The ECB has claimed that the digital euro will be ``the most private electronic payment option'' \citep{ECB2024Blog}, yet the proposed architecture relies on policy commitments (``data will only be accessed with appropriate authorization'') rather than structural guarantees---a distinction this paper treats as fundamental.
+
+\subsection{The AML Paradox: Surveillance Without Detection}
+
+The case for surveillance in digital currency design typically rests on anti-money laundering requirements. Current AML frameworks, codified through Financial Action Task Force recommendations and implemented globally, mandate that financial institutions identify customers, monitor transactions, and report suspicious activity \citep{FATF2012}.
+
+Empirical evidence on AML effectiveness, however, reveals a troubling paradox. Despite estimated annual compliance costs exceeding \$300 billion globally, less than 1\% of illicit financial flows are currently seized \citep{Pol2020}. The United Nations Office on Drugs and Crime estimates that 2--5\% of global GDP (\$800 billion to \$2 trillion) is laundered annually, with interdiction rates suggesting systemic failure rather than implementation challenges \citep{UNODC2011}.
+
+More critically, AML systems exhibit systematic enforcement asymmetry. Aggressive prosecution targets primitive laundering methods---cash structuring, money mules, basic layering---while sophisticated actors exploiting derivatives, offshore structures, and complex corporate arrangements face minimal consequences \citep{Farzulla2025AML}. The contrast between vigorous prosecution of money mules (often coerced individuals transferring funds) and the \$3.8 million fine imposed on Danske Bank after \$200 billion in suspicious transactions illustrates this pattern \citep{Lynch2022, Europol2021}. Sophisticated actors exploit the very financial instruments designed to manage legitimate risk---derivatives, hedging structures, and cross-border investment vehicles---achieving regulatory invisibility through mechanisms that \textit{appear} as prudent risk management \citep{Farzulla2025Asymptotic}.
+
+This enforcement asymmetry is not accidental. Current AML frameworks were designed to detect flows that \textit{look like crime} (unusual cash movements) rather than flows that \textit{look like commerce} (sovereign bonds, property purchases, derivative contracts). A system optimized for one category fails systematically against the other \citep{Kang2018}.
+
+The implication for CBDC design is significant: extending current surveillance approaches to digital currency will replicate existing failures while creating new privacy costs. Comprehensive monitoring will impose friction on legitimate users without meaningfully impacting sophisticated illicit actors who can exploit the same complexity gaps that defeat current AML systems.
+
+\subsection{Research Contribution}
+
+This paper proposes an alternative CBDC architecture that addresses the fundamental design flaw in current approaches: treating surveillance as a prerequisite for security rather than one possible mechanism among many.
+
+The proposed framework achieves crime detection through mechanism design rather than identity monitoring. Its core innovations include:
+
+\begin{enumerate}
+    \item \textbf{Separation of pattern detection from identity:} An AI-driven monitoring system analyzes transaction graph structure for anomalies without accessing participant identities. The system detects \textit{what} is suspicious, not \textit{who} is suspicious.
+
+    \item \textbf{Transaction-level intervention:} Suspicious activity flags individual transactions rather than accounts or identities. A flagged transaction is paused; the user's broader financial access remains unaffected.
+
+    \item \textbf{Opt-in deanonymization:} When a transaction is flagged, both parties receive anonymous notification and may choose to provide explanation. Verification releases the transaction; non-response results in transaction cancellation, not investigation.
+
+    \item \textbf{Abandonment without consequence:} Users may abandon flagged transactions without deanonymization. Funds return to sender. No record is created linking identity to suspicious patterns.
+\end{enumerate}
+
+This architecture inverts the burden of proof. Rather than requiring users to demonstrate legitimacy, it requires the system to demonstrate suspicion---and even then, users retain the option to simply walk away. The choice becomes: explain and proceed, or abandon and remain private.
+
+Paradoxically, this framework may be \textit{more} effective at preventing illicit finance than surveillance-based alternatives. Laundering operations that cannot complete transactions are failed laundering operations. Unlike current systems where sophisticated actors ``comply their way through'' via documentation theater, architectural enforcement creates barriers that cannot be circumvented through legal form.
+
+\subsection{Paper Structure}
+
+The paper proceeds as follows:
+
+Section 2 reviews existing CBDC proposals and privacy-preserving payment literature, establishing the current state of design thinking and identifying gaps.
+
+Section 3 presents the core architectural framework, detailing the detection layer, intervention layer, resolution layer, and identity firewall.
+
+Section 4 analyzes game-theoretic properties of the abandonment mechanism and demonstrates why it creates effective deterrence without requiring identity compromise.
+
+Section 5 addresses technical implementation, including cryptographic requirements and feasibility analysis.
+
+Section 6 responds to anticipated objections and explores edge cases.
+
+Section 7 proposes governance structures for privacy-preserving CBDC systems.
+
+Section 8 concludes with policy implications and research directions.
+
+
+\section{Literature Review}
+
+\subsection{CBDC Design Landscape}
+
+Central bank interest in digital currencies has accelerated dramatically since 2020. The 2024 BIS survey confirms this trajectory: of 93 central banks surveyed, 91\% are now exploring either retail CBDCs, wholesale CBDCs, or both, with wholesale implementations advancing to more mature stages than retail \citep{BIS2024Survey}. A comprehensive review analyzing 135 research papers published between 2018 and 2025 identifies privacy protection as a persistent design challenge across proposals \citep{CBDCSurvey2025}. Major economy proposals reveal convergent design assumptions.
+
+The European Central Bank's digital euro project emphasizes ``offline functionality, privacy, and programmability'' while maintaining that ``appropriate checks'' will ensure compliance with AML requirements \citep{ECB2020, ECB2023}. Privacy is framed as compatible with regulatory oversight, with technical details delegated to implementation.
+
+The Federal Reserve's discussion papers similarly acknowledge privacy concerns while maintaining that digital dollar design must accommodate ``appropriate law enforcement access'' \citep{FedReserve2022}. The unstated assumption is that privacy and surveillance exist on a spectrum, with optimal design finding appropriate balance. Notably, event study evidence from cryptocurrency markets suggests that regulatory announcements generate significant market reactions, with infrastructure-level disruptions producing larger and more persistent effects than regulatory uncertainty signals \citep{Farzulla2025EventStudy}---a finding with implications for how CBDC design choices may affect adoption and market dynamics.
+
+China's digital yuan (e-CNY) represents the most advanced large-economy implementation. While technical specifications remain partially opaque, available evidence indicates comprehensive transaction visibility with ``controllable anonymity''---a formulation that privileges control over anonymity \citep{Auer2021, Fan2020}.
+
+The Bank of England's consultation papers explicitly frame privacy as ``tiered,'' with small transactions potentially anonymous but larger transactions subject to full identification \citep{BoE2023}. This approach assumes that surveillance is necessary above some threshold and that the threshold can be set appropriately.
+
+Across proposals, privacy appears as a constraint to be managed rather than a design objective to be achieved. The possibility of architectural privacy---systems that \textit{cannot} perform surveillance because they lack the technical capability---receives minimal attention. Whether stated design principles in official CBDC documentation will predict actual implementation outcomes remains an open empirical question; evidence from cryptocurrency markets suggests that whitepaper claims exhibit only moderate alignment with subsequent market behavior patterns \citep{Farzulla2025Tensor}, cautioning against treating policy commitments as equivalent to architectural guarantees.
+
+\subsection{Privacy-Preserving Payment Systems}
+
+The theoretical foundation for privacy-preserving digital payments predates current CBDC debates by decades. David Chaum's 1982 work on blind signatures demonstrated that digital payments could be cryptographically structured to prevent linkage between payer identity and transaction \citep{Chaum1982}. His eCash system, implemented at DigiCash in the 1990s, proved technical feasibility before commercial failure due to adoption challenges unrelated to privacy architecture \citep{Chaum1983}.
+
+Subsequent developments in zero-knowledge proof systems substantially expanded privacy-preserving capabilities. Zcash demonstrated that transaction validity could be verified without revealing sender, recipient, or amount through zk-SNARKs \citep{Sasson2014}. While Zcash addresses different requirements than CBDC (decentralized cryptocurrency vs. central bank liability), its cryptographic primitives are directly applicable.
+
+Academic literature on privacy-preserving CBDC specifically has grown substantially. \citet{Gross2021} propose a ``privacy-first'' design using blind signatures for low-value transactions. \citet{Allen2020} analyze privacy-utility trade-offs in digital currency design. \citet{Garratt2021} examine how privacy affects monetary policy transmission.
+
+However, this literature predominantly accepts the surveillance--privacy trade-off framing. Privacy protections are proposed as carve-outs for specific use cases (small transactions, offline payments) rather than as default architecture. The possibility of achieving equivalent security through alternative mechanisms receives limited attention.
+
+Recent central bank research has begun exploring privacy-enhancing technologies more systematically. The Bank of Canada's 2025 analysis examines zero-knowledge proofs, secure multi-party computation, group signatures, and other cryptographic approaches, though it concludes that ``techniques to achieve cash-like privacy are immature'' with potential hidden vulnerabilities \citep{BoC2025}. The BIS Innovation Hub's Project Tourbillon provides practical exploration of privacy-security trade-offs in prototype implementations \citep{Tourbillon2023}. Notably, this central bank acknowledgment that privacy-preserving technology remains immature occurs alongside the choice to proceed with surveillance-based architectures---suggesting that immaturity serves as justification for surveillance rather than motivation for further privacy-preserving research.
+
+\subsection{AML Effectiveness Literature}
+
+The empirical literature on AML effectiveness provides crucial context for CBDC design debates. \citet{Pol2020} characterizes the global AML regime as potentially ``the world's least effective policy experiment,'' noting the extraordinary gap between compliance costs and interdiction rates.
+
+\citet{Levi2020} documents how risk-based approaches, intended to focus resources on genuine threats, instead enable sophisticated actors to present themselves as low-risk while primitive methods trigger automatic scrutiny. The inverted risk hierarchy---sophisticated actors receiving less scrutiny than unsophisticated ones---represents a systematic failure mode rather than implementation error.
+
+\citet{Findley2014} demonstrate through field experiments that incorporation service providers frequently fail to verify beneficial ownership even when legal requirements mandate verification. Compliance is formal rather than substantive.
+
+\citet{Sharman2017} shows how secrecy jurisdictions survive regulatory pressure through adaptive strategies, maintaining opacity while achieving formal compliance with international standards.
+
+The literature suggests that extending current AML approaches to CBDCs will replicate existing failures. Systems designed to detect primitive laundering will remain ineffective against sophisticated actors, while creating new privacy costs for legitimate users.
+
+FATF's 2024 assessment of virtual asset implementation reveals persistent gaps: 75\% of assessed jurisdictions remain only partially compliant or non-compliant with virtual asset standards, and over half have not implemented the Travel Rule \citep{FATF2024}. Theoretical work directly connecting money laundering dynamics to CBDC privacy design complicates the surveillance narrative further. \citet{MLPrivacyCBDC2023} demonstrate through general equilibrium modeling that while CBDC with less anonymity than cash decreases money laundering, high-anonymity CBDC with low interest rates decreases output from \textit{both} laundering and non-laundering agents---suggesting that privacy design involves complex welfare trade-offs rather than simple surveillance optimization.
+
+\subsection{Gap in Current Literature}
+
+The existing literature contains a significant gap: limited analysis of CBDC architectures that achieve security through mechanism design rather than surveillance. Privacy-preserving proposals focus on protecting specific transaction categories while accepting surveillance for others. AML critiques identify failures without proposing alternative detection approaches. A 2024 systematic review of CBDC privacy literature confirms this gap, finding that existing research predominantly examines one-tier operational models that pose ``substantial privacy challenge due to potential mass surveillance'' without adequately exploring architectural alternatives \citep{CBDCPrivacyReview2024}.
+
+This paper addresses the gap by developing an architectural framework where privacy is default and security emerges from structural incentives rather than monitoring capabilities. The contribution lies not in novel cryptographic techniques but in applying existing primitives to create a coherent alternative to surveillance-based design.
+
+
+\section{Architectural Framework}
+
+\subsection{Design Principles}
+
+The proposed architecture rests on four foundational principles:
+
+\textbf{Principle 1: Separation of pattern detection from identity.} Transaction graph analysis can identify structural anomalies---unusual network patterns, velocity anomalies, suspicious counterparty relationships---without knowing participant identities. The detection system processes anonymized transaction data and outputs suspicion scores for specific transactions, never for users.
+
+\textbf{Principle 2: Transaction-level intervention.} Suspicious activity affects the specific transaction flagged, not the user's broader financial access. A merchant receiving a suspicious payment experiences a delay on that payment; their ability to receive other payments, make payments, or access existing balances remains unaffected.
+
+\textbf{Principle 3: Opt-in deanonymization.} Identity revelation is always voluntary. Users may choose to explain flagged transactions, providing whatever information they consider appropriate. Alternatively, they may abandon the transaction without explanation and without creating any record linking their identity to the suspicious pattern.
+
+\textbf{Principle 4: Architectural enforcement.} Privacy guarantees are structural, not policy. The system cannot reveal identities because it does not possess the capability to link transactions to identities without active user participation. This contrasts with policy promises (``we will only access data with appropriate authorization'') that depend on institutional behavior.
+
+\subsection{Detection Layer}
+
+The Detection Layer performs transaction graph analysis without identity access. Its components include:
+
+\textbf{Transaction Graph Processor:} Ingests anonymized transaction data including amounts, timestamps, and anonymized counterparty tokens. Maintains rolling graph of transaction relationships without ability to deanonymize nodes.
+
+\textbf{Pattern Matching Engine:} Compares transaction structures against known illicit typologies: rapid movement patterns characteristic of layering, network structures associated with mule operations, velocity anomalies suggesting structuring. Pattern libraries are publicly auditable.
+
+\textbf{Anomaly Detection System:} Identifies novel suspicious structures not matching known typologies using machine learning approaches. Training data consists of anonymized historical patterns labeled as legitimate or suspicious by the Resolution Layer (see below), creating a feedback loop that improves detection without requiring identity information.
+
+\textbf{Suspicion Scorer:} Outputs suspicion scores for individual transactions. Scores above threshold trigger intervention. Threshold parameters are publicly disclosed and subject to governance oversight.
+
+Critically, the Detection Layer has no access to identity mapping. It processes transaction IDs and anonymized counterparty tokens. It cannot determine that Transaction X involves User Y. Its output is: ``Transaction X has suspicion score Z,'' never ``User Y is suspicious.''
+
+\subsection{Intervention Layer}
+
+The Intervention Layer receives flagged transactions from the Detection Layer and implements intervention protocols.
+
+\textbf{Transaction Freeze:} Flagged transactions are paused pending resolution. Funds remain in escrow. Neither sender nor recipient can access the specific transaction amount until resolution occurs.
+
+\textbf{Anonymous Notification:} Both transaction parties receive notification that the transaction has been flagged. Notifications are anonymous---delivered through the same channel as legitimate transaction confirmations without additional identifying information.
+
+\textbf{Resolution Options:} Parties are presented with options: (1) provide voluntary explanation, (2) request additional time, (3) abandon transaction. No option requires identity disclosure to proceed.
+
+\textbf{Timeout Protocol:} If neither party responds within the timeout period (configurable, e.g., 72 hours), the transaction is automatically cancelled. Funds return to sender. No record is created linking any identity to the suspicious pattern.
+
+The Intervention Layer, like the Detection Layer, lacks identity access. It processes transaction IDs and can freeze or release transactions, but cannot determine who is involved in any transaction.
+
+\subsection{Resolution Layer}
+
+The Resolution Layer handles voluntary explanations and makes release decisions.
+
+\textbf{Explanation Receipt:} When parties voluntarily provide explanation, the Resolution Layer receives: (1) the explanation text, (2) any supporting documentation, (3) a cryptographic proof that the explainer is a party to the transaction (without revealing which party or any other identity information).
+
+\textbf{Human Review:} Trained reviewers evaluate explanations against the suspicion indicators that triggered the flag. Reviewers see: explanation content, suspicion score rationale, transaction amount. Reviewers do not see: party identities (unless voluntarily disclosed in explanation), account histories, other transactions.
+
+\textbf{Decision Output:} Reviewers make binary decisions: release (transaction proceeds) or maintain freeze (parties may provide additional explanation or abandon). Release decisions are logged for audit; freeze decisions trigger notification with generic rationale.
+
+\textbf{Anonymized Feedback:} Resolution decisions feed back to the Detection Layer's training system. Transactions released after explanation indicate false positives; abandoned transactions contribute to suspicion pattern learning. All feedback is anonymized.
+
+\subsection{Identity Firewall}
+
+The Identity Firewall is the architectural component that makes privacy guarantees structural rather than policy-dependent.
+
+\textbf{Cryptographic Separation:} Transaction graph data and identity mapping are held by separate systems with no shared access. The Detection, Intervention, and Resolution Layers operate on the transaction graph. Identity mapping exists only in the Wallet Layer (user-facing application) and is never transmitted to other components.
+
+\textbf{Zero-Knowledge Proofs:} When users voluntarily explain transactions, they prove party status (``I am authorized to speak about Transaction X'') without revealing identity (``I am User Y''). Only if users explicitly choose to reveal identity does the Resolution Layer learn it.
+
+\textbf{No Backdoor Architecture:} The system is designed such that state actors cannot compel identity revelation for specific transactions without user cooperation. This is not a policy commitment but a structural property: the components that perform analysis simply do not possess identity information.
+
+\textbf{Threshold Cryptography for Emergency Access:} If governance structures determine that emergency identity access is needed (e.g., court-ordered investigation), a threshold scheme requires multiple independent parties to authorize decryption of identity mapping for specific transactions. This creates accountability for access while making bulk surveillance technically impossible.
+
+
+\section{Game-Theoretic Analysis}
+
+Recent theoretical and empirical work supports the viability of privacy-preserving approaches to digital currency design. \citet{Tinn2025} develops a formal model of digital currency with asymmetric privacy, demonstrating that different privacy architectures produce distinct welfare implications that cannot be captured by simple surveillance--security trade-off framings. Empirically, \citet{BIS2024Privacy} find through randomized survey experiments involving over 3,500 participants that privacy features increase willingness to use CBDC by up to 60\% for privacy-sensitive transactions---suggesting that privacy preservation may enhance rather than undermine adoption and, by extension, monetary policy transmission.
+
+\subsection{The Abandonment Mechanism}
+
+The abandonment mechanism is central to the framework's deterrent properties. Understanding its game-theoretic structure clarifies why privacy-preserving architecture can achieve security outcomes equivalent or superior to surveillance.
+
+Consider an actor attempting to launder funds through the CBDC system. They initiate a transaction that is flagged by the Detection Layer. They face three options:
+
+\begin{enumerate}
+    \item \textbf{Explain and proceed:} Provide explanation that satisfies the Resolution Layer. This requires producing a legitimate narrative for the transaction. For truly illicit transactions, this may be difficult or impossible; for sophisticated launderers, it requires effort and creates potential evidence.
+
+    \item \textbf{Abandon silently:} Cancel the transaction. Funds return to sender. No identity is linked to the suspicious pattern. The laundering attempt fails, but no evidence is created.
+
+    \item \textbf{Wait for timeout:} Take no action. Transaction is automatically cancelled after timeout period. Equivalent to option 2 with delay.
+\end{enumerate}
+
+\subsection{Deterrent Properties}
+
+The abandonment option creates a deterrent that does not require identity compromise:
+
+\textbf{Failed transactions are failed laundering.} A laundering operation that cannot move money has failed in its core objective. Unlike current AML systems where sophisticated actors ``comply through'' by producing documentation, architectural friction creates barriers that cannot be circumvented through legal form.
+
+\textbf{Volume deterrence.} Laundering operations require moving substantial funds. If a significant fraction of transactions are flagged and must be abandoned, the operation becomes economically nonviable regardless of whether any individual is identified.
+
+\textbf{Pattern signal without prosecution.} Abandoned transactions provide valuable data for the Detection Layer. While individual abandonments reveal no identity, aggregate patterns of abandonment indicate detection system accuracy and can improve future detection. The system learns from illicit actors' behavior without needing to identify them.
+
+\textbf{No ``comply through'' option.} Current AML systems can be defeated by producing appropriate documentation---establishing legitimate-appearing corporate structures, maintaining plausible transaction narratives, etc. The abandonment mechanism eliminates this strategy: either the transaction can be legitimately explained (in which case it may actually be legitimate) or it cannot proceed.
+
+\subsection{Legitimate User Experience}
+
+For legitimate users, the framework creates minimal friction:
+
+\textbf{Low flag rates.} Detection systems tuned for high-confidence anomalies will flag a small fraction of legitimate transactions. The false positive rate is a tunable parameter subject to governance oversight.
+
+\textbf{Easy resolution.} Legitimate transactions have legitimate explanations. A flagged payment for a large purchase can be explained by providing purchase documentation. A flagged transfer to a new recipient can be explained as ``I'm sending money to my friend.'' The explanation need not be formally verified; it need only be plausible.
+
+\textbf{Abandonment as protection.} If a legitimate user prefers not to explain a transaction (e.g., for personal privacy reasons), abandonment imposes no penalty beyond transaction failure. This may be preferable to users who value privacy over transaction completion.
+
+\textbf{No account-level consequences.} A flagged transaction does not affect the user's broader financial access. Their account is not frozen, investigated, or marked for enhanced scrutiny.
+
+\subsection{Comparative Advantage Over Surveillance}
+
+The framework offers advantages over surveillance-based approaches:
+
+\textbf{No false positive harm.} In surveillance systems, false positives can result in account freezes, investigation, and reputational damage. The framework's worst case for false positives is transaction delay and possible abandonment---annoying but not harmful.
+
+\textbf{No mission creep.} Surveillance infrastructure created for AML purposes can be repurposed for political surveillance, commercial exploitation, or other uses beyond original intent. Architectural privacy prevents mission creep by eliminating the capability.
+
+\textbf{No data breach risk.} Comprehensive transaction data linked to identities creates valuable targets for theft. Data that doesn't exist cannot be stolen.
+
+\textbf{Superior detection of sophisticated laundering.} Current AML systems detect primitive laundering (unusual cash patterns) while missing sophisticated laundering (complex corporate structures, derivatives). The proposed system's pattern detection focuses on transaction graph structure regardless of legal form, potentially detecting sophisticated schemes that evade current monitoring.
+
+\subsection{Empirical Validation}
+
+Agent-based simulation comparing graph-only (privacy-preserving) and identity-aware (surveillance-based) detection validates the framework's effectiveness claims while revealing important nuances about the privacy--security trade-off.
+
+\textbf{Methodology.} We simulate a transaction network with 500 legitimate identities and 50 launderer identities, each controlling 1--2 and 3--6 wallets respectively. Launderers attempt to blend in by mimicking legitimate transaction patterns with minor structural differences (10\% structuring behavior, slightly elevated volumes). Detection models use random forest classifiers trained on graph topology features (degree centrality, PageRank, clustering coefficient, betweenness, transaction volume and flow metrics) for graph-only detection, with additional identity-linked features (wallet count per identity, aggregate cross-wallet volume, watchlist status, prior suspicious activity reports) for identity-aware detection.
+
+\textbf{On Testing ``Primitive'' Laundering.} A potential objection holds that testing against unsophisticated laundering patterns weakens the findings. We argue the opposite: primitive laundering represents the \textit{strongest possible test} for surveillance value. If surveillance infrastructure cannot improve detection of the simple patterns it was designed to catch---cash structuring, velocity anomalies, known bad actor flagging---it certainly cannot improve detection of sophisticated laundering that exploits derivatives, shell companies, and complex corporate structures \citep{Farzulla2025Asymptotic}. Testing against easy cases and finding surveillance adds nothing is more damning than testing against hard cases.
+
+\textbf{Baseline Performance.} Graph-only detection achieves 0.892 AUC at wallet level compared to identity-aware's 1.000 AUC. At identity level (aggregating wallet predictions), graph-only achieves 0.981 AUC---a gap of less than 2\%. The most important features for identity-aware detection are \texttt{num\_wallets} (0.34 importance) and aggregate volume metrics (0.52 combined)---all achievable through pseudonymous linking without identity revelation.
+
+\textbf{Watchlist Impact.} A follow-up experiment addresses the potential critique that random watchlist assignment artificially diminishes watchlist value. We generate correlated watchlists where 80\% of launderers appear on the watchlist (realistic for known bad actors) while only 5\% of legitimate users appear (false positives). This achieves watchlist-label correlation of 0.89---a highly informative feature.
+
+Results reveal a crucial asymmetry: watchlists substantially improve graph-only detection (0.87 $\rightarrow$ 0.99 AUC), but provide \textit{zero} marginal improvement over pseudonymous identity linking (1.00 $\rightarrow$ 1.00 AUC). The surveillance infrastructure adds value only when cross-wallet linking is unavailable. When linking is present---achievable through privacy-preserving techniques---watchlists become redundant.
+
+\textbf{Evasion Sensitivity.} Graph-only detection degrades from 0.949 to 0.725 AUC as launderers spread activity across 1--15 wallets (sybil attack). Identity-aware detection remains robust due to cross-wallet aggregation. However, in KYC-constrained CBDC environments where creating multiple wallets requires identity verification, sybil attacks become costly. When launderers are limited to 1--2 wallets (same as legitimate users), graph-only achieves 94.9\% AUC---a gap of under 2\%.
+
+\textbf{Implications.} These findings reframe the privacy--security trade-off. The value of identity-aware detection comes entirely from knowing ``these wallets belong to the same entity''---achievable through zero-knowledge constructions such as Zether \citep{Bunz2020} or composable SNARKs \citep{Campanelli2017}---rather than ``this entity is John Smith on a sanctions watchlist.'' Pseudonymous linking captures the detection benefit without the privacy cost. Given that 2.96 million UK citizens recently petitioned against digital identity infrastructure \citep{Statewatch2025} and 41\% of ECB CBDC consultation responses focused on privacy concerns \citep{ECBConsultation2021}, any marginal improvement from full surveillance is not worth the catastrophic loss of public trust.
+
+
+\section{Technical Implementation}
+
+\subsection{Cryptographic Requirements}
+
+The proposed architecture relies on established cryptographic primitives:
+
+\textbf{Zero-Knowledge Proofs:} Used for transaction validation (proving transaction validity without revealing details) and party authentication (proving party status without revealing identity). zk-SNARKs or zk-STARKs provide efficient implementations. The Zcash implementation demonstrates production viability of similar requirements \citep{Sasson2014}.
+
+\textbf{Secure Multi-Party Computation:} Enables pattern detection across transaction data without any single party accessing complete data. MPC protocols allow the Detection Layer to compute aggregate statistics and pattern matches without any component seeing raw transaction details.
+
+\textbf{Threshold Cryptography:} Emergency access to identity mapping (when authorized by governance processes) requires threshold signatures from multiple independent parties. This prevents any single actor from accessing identity data while preserving emergency capability.
+
+\textbf{Blind Signatures:} Enable transaction authorization without linking authorization to identity. Central bank signature on transaction tokens proves validity without revealing transaction details to the central bank.
+
+\textbf{Ring Signatures:} Allow parties to prove membership in transaction sets without revealing which specific party they are. Useful for anonymous explanation submission in the Resolution Layer.
+
+\subsection{Feasibility Assessment}
+
+Each required primitive has been demonstrated in production systems:
+
+\begin{itemize}
+    \item Zero-knowledge proofs: Zcash processes approximately 500,000 shielded transactions per month \citep{ElectricCoin2023}.
+    \item Secure multi-party computation: Deployed in privacy-preserving analytics systems including Google's Private Join and Compute \citep{Google2019}.
+    \item Threshold cryptography: Used in production cryptocurrency custody solutions and distributed key management \citep{Gennaro2016}.
+    \item Blind signatures: Originally proposed in 1982; implemented in multiple privacy-preserving systems \citep{Chaum1982}.
+\end{itemize}
+
+Performance remains a consideration. Current ZKP systems require significant computational overhead compared to transparent transactions. However, proof generation can occur client-side (user devices), distributing computational load. Verification is substantially faster than generation. For central bank deployment with adequate infrastructure, performance is achievable.
+
+Recent implementations demonstrate continued progress toward practical viability. \citet{OfflineCBDC2024} present a Secure Element-based system for offline CBDC transactions that achieves latency comparable to commercial payment systems while maintaining regulatory compliance capabilities. Advances in secure multi-party computation continue to reduce communication overhead, with recent protocols achieving linear communication complexity for threshold corruption scenarios that previously required super-linear scaling \citep{MPC2024}. A comprehensive review of zero-knowledge proof developments notes that while challenges remain, ``every major L1 and L2'' blockchain platform is now integrating ZKP infrastructure, creating a substantial engineering base for privacy-preserving financial systems \citep{ZKPSurvey2025}.
+
+\subsection{System Architecture}
+
+A complete system would include:
+
+\textbf{Wallet Layer:} User-facing application managing identity, generating proofs, and interfacing with transaction layers. This is the only layer with access to user identity.
+
+\textbf{Transaction Layer:} Processes anonymized transactions, maintains ledger, handles settlement. No identity access.
+
+\textbf{Detection Layer:} Analyzes transaction patterns for anomalies. No identity access.
+
+\textbf{Intervention Layer:} Manages flagged transactions and resolution process. No identity access except voluntary disclosure.
+
+\textbf{Governance Layer:} Manages system parameters, threshold key shares, audit processes. Oversight without operational access.
+
+Each layer operates independently with defined interfaces. Compromise of any single layer does not enable identity compromise without user cooperation or threshold key activation.
+
+
+
+\subsection{A Concrete PET AML Stack: PSI + Secure Risk Propagation + ZK Policy Proofs}
+\label{sec:pet-aml-stack}
+
+This section instantiates the paper's high-level claim into a concrete ``privacy-enhancing AML (PET--AML) stack'' that can be implemented today: (i) \emph{private watchlist checking} using Private Set Intersection (PSI) and/or VOPRF-based membership tests, (ii) \emph{secure risk propagation} over pseudonymous transaction graphs using secure computation, and (iii) \emph{transaction-time policy proofs} in zero-knowledge that make compliance verifiable \emph{without} identity disclosure. These components align with the paper's layered architecture: the Wallet Layer performs screening and proof generation, the Transaction Layer verifies proofs, the Detection Layer computes risk on pseudonyms, and the Governance Layer controls exceptional identity exposure.
+
+\subsubsection{Threat model and trust assumptions}
+\label{sec:pet-aml-threat-model}
+
+\textbf{Parties.} We assume (a) a \emph{wallet / PSP} that performs KYC and issues an unlinkable credential to the user, (b) a \emph{ledger operator} (central bank or authorized operator) that validates transaction proofs and maintains the settlement ledger, (c) a \emph{compliance authority} (FIU/sanctions unit) that maintains watchlists and publishes policy parameters, and (d) a \emph{governance quorum} (e.g., ombuds + privacy regulator + judiciary delegate) that holds threshold key shares for exceptional identity exposure.
+
+\textbf{Adversaries.} We target (i) honest-but-curious infrastructure operators, (ii) malicious users attempting to launder funds while remaining unlinkable, and (iii) partial compromise/collusion of operational entities. We avoid a single ``super-admin'' trust anchor: identity access requires threshold activation and jurisdiction-dependent legal authorization.
+
+\textbf{Security objectives.}
+\begin{itemize}
+    \item \emph{Transaction privacy:} the ledger validates payments and enforces limits without learning real-world identity; routine analytics operate on pseudonyms.
+    \item \emph{Watchlist privacy:} the compliance authority learns nothing about non-matching users/transactions; the ledger learns nothing about the watchlist and does not learn who is being screened.
+    \item \emph{Enforceability:} users cannot create valid transactions without satisfying policy constraints; false negatives are bounded by watchlist correctness and credential issuance integrity.
+    \item \emph{Due process:} identity disclosure is auditable, rate-limited, and threshold-gated; there is no bulk de-anonymization API.
+\end{itemize}
+
+\subsubsection{Component design and interfaces}
+\label{sec:pet-aml-components}
+
+Table~\ref{tab:pet-aml-components} summarizes the three stack elements and how they interact.
+
+\begin{table}[H]
+\centering
+\caption{PET--AML stack components and outputs.}
+\label{tab:pet-aml-components}
+\begin{tabular}{p{3.1cm} p{4.3cm} p{3.6cm} p{2.8cm}}
+\toprule
+\textbf{Component} & \textbf{Primitive} & \textbf{Output to ledger / detection layer} & \textbf{Primary privacy guarantee} \\
+\midrule
+Private watchlist check & VOPRF-based membership / PSI (unbalanced PSI variants support large watchlists) \citep{rfc9497,Wang2025UnbalancedPSI} & match bit and (optionally) a signed ``screening witness'' bound to an epoch & Server learns nothing about queries; non-matching clients learn only ``no-match'' \\
+\addlinespace
+Secure risk propagation & Secure computation over transaction graph features (HE/SS hybrid; MPC graph frameworks) \citep{Koti2024Graphiti,Yu2025GraphAce} & risk scores / bands on pseudonyms & Watchlist-seeded scoring without revealing which nodes were seeded \\
+\addlinespace
+ZK policy proofs & zk-SNARK/zk-STARK/range proofs for policy constraints \citep{Groth2016,PLONK2019,STARK2018,ElHajj2024ZKBench} & $\pi_{\text{policy}}$ attached to transaction; verified at admission & Ledger verifies compliance without learning identity or sensitive attributes \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{(1) Private watchlist checking (PSI/VOPRF).}
+We implement sanctions/PEP screening as a \emph{privacy-preserving membership test}: the wallet (or PSP, depending on the threat model) derives a stable identifier $x$ from KYC material (e.g., a salted hash of canonicalized identity attributes) and runs a PSI-style protocol against the watchlist set $W$. Modern unbalanced PSI is explicitly designed for the AML regime, where the server holds a large set while each client query set is small \citep{Wang2025UnbalancedPSI}. A complementary deployment is to use standardized verifiable OPRFs (VOPRFs) \citep{rfc9497}: the compliance authority evaluates an oblivious PRF on $x$, and the wallet locally checks membership against a periodically published, PRF-transformed watchlist.
+
+\textbf{Interface.} At epoch $e$, the wallet obtains a screening token $\tau_e$ and computes $m_e \in \{0,1\}$ locally (match/no-match). When $m_e=0$, the wallet can include a compact witness (e.g., a signature from the compliance authority over a commitment to $x$ and $e$) in the transaction, proving that screening occurred \emph{without} revealing $x$. When $m_e=1$, policy triggers a dispute window in the Intervention Layer rather than automatic identity leakage. This preserves due process and prevents ``watchlist leakage'' to the ledger operator.
+
+\paragraph{(2) Secure risk propagation on pseudonymous graphs.}
+The Detection Layer benefits from graph-structured signals (fan-in/fan-out motifs, bursty flows, multi-hop proximity to known bad actors) but should not learn identities. We therefore treat identity as a \emph{sealed label} and compute risk on pseudonyms. The privacy challenge is that even \emph{which} pseudonyms are seeded as ``known bad'' can be sensitive.
+
+We propose a two-tier design:
+\begin{enumerate}
+    \item \textbf{Cleartext structure, secret seeds.} The transaction graph structure and non-identifying features can remain available to the Detection Layer. Only the seed vector (e.g., watchlist-hit pseudonyms, typology flags) is secret-shared/encrypted. Secure computation then evaluates a risk function $r \leftarrow f(G, s)$ without revealing $s$.
+    \item \textbf{Secure multi-domain propagation.} For cross-PSP or cross-bank graphs, use secure graph analytics frameworks that reduce edge-proportional communication overhead. Recent work demonstrates large improvements in secure iterative graph analysis, scaling to million-scale graphs under semi-honest models \citep{Koti2024Graphiti,Yu2025GraphAce}.
+\end{enumerate}
+
+\textbf{Risk function.} A practical choice is a damped $k$-step diffusion (personalized PageRank-style) or motif-based scoring with bounded iterations. This keeps compute predictable, reduces the attack surface of arbitrary model execution, and makes performance auditing tractable.
+
+\paragraph{(3) ZK policy proofs at transaction admission.}
+Transaction-time ZK proofs prevent a large class of laundering strategies by making policy constraints \emph{verifiable} on entry to the ledger:
+\begin{itemize}
+    \item \emph{Balance correctness:} prove sufficient funds and no double-spend.
+    \item \emph{Tiered limits:} prove amount and cumulative spend remain within per-tier caps (daily/weekly) without revealing exact history (range and sum proofs).
+    \item \emph{Credential validity:} prove possession of a valid, unrevoked KYC credential with selective disclosure (e.g., prove ``resident'' or ``over-18'' without revealing full identity), optionally using threshold-issued credentials such as Coconut \citep{Sonnino2019Coconut}.
+    \item \emph{Screening performed:} prove inclusion of a valid screening witness for epoch $e$, binding the transaction to a recent watchlist check.
+\end{itemize}
+
+Empirically, zk-SNARKs offer very small proof sizes and fast verification (at the cost of trusted-setup assumptions), while zk-STARKs are transparent and post-quantum secure but typically incur larger proofs \citep{ElHajj2024ZKBench}. The design is modular: a jurisdiction can select a proof system on the ``succinctness vs. transparency'' frontier and upgrade over time as engineering capacity improves.
+
+\subsubsection{Performance envelope and deployment profile}
+\label{sec:pet-aml-performance}
+
+The stack is meant to be deployable under realistic constraints. The following envelope is indicative, not normative; concrete numbers depend on implementation details, hardware, and policy complexity.
+
+\begin{table}[H]
+\centering
+\caption{Indicative performance envelope for the PET--AML stack (order-of-magnitude).}
+\label{tab:pet-aml-envelope}
+\begin{tabular}{p{3.2cm} p{3.0cm} p{3.4cm} p{4.2cm}}
+\toprule
+\textbf{Operation} & \textbf{Latency target} & \textbf{Bandwidth / storage} & \textbf{Notes} \\
+\midrule
+Watchlist check (wallet $\rightarrow$ FIU) & sub-second interactive; amortizable via epochs & $\mathcal{O}(\text{KB})$ per check; server stores $|W|$ items & Unbalanced PSI supports large $|W|$ with modest client cost \citep{Wang2025UnbalancedPSI} \\
+\addlinespace
+Transaction ZK proof generation & 10--500\,ms (desktop); 100\,ms--few\,s (mobile) & proof size: $\mathcal{O}(10^2)$ bytes (SNARK) to $\mathcal{O}(10^4)$ bytes (STARK) & Benchmarks vary with circuit; verification typically milliseconds \citep{ElHajj2024ZKBench} \\
+\addlinespace
+Secure risk propagation (batch) & seconds--minutes per batch (e.g., hourly/daily) & state proportional to $|V|$; preprocessing amortizes multiplications & Secure graph frameworks report million-scale feasibility and large comms reductions \citep{Koti2024Graphiti,Yu2025GraphAce} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Operational profile.} To keep the user experience smooth, we recommend (a) performing PSI screening at wallet ``ready'' time (onboarding and periodic re-screening), (b) generating ZK proofs at transaction time using fixed, audited circuits with bounded complexity, and (c) running secure risk propagation in batches unless a high-risk typology requires near-real-time scoring. The resulting system preserves routine payment performance while retaining a credible privacy posture and an auditable, threshold-gated pathway for exceptional disclosure.
+
+
+
+\section{Addressing Objections}
+
+\subsection{``Criminals Will Just Abandon Transactions''}
+
+Correct. Criminals will abandon flagged transactions. This is the intended outcome.
+
+A laundering operation that cannot complete transactions has failed. The goal of AML is not prosecution of launderers but prevention of laundering. If the system prevents money movement, it has succeeded regardless of whether anyone is identified.
+
+Additionally, abandoned transactions create valuable signal. Patterns of abandonment indicate which transaction types are associated with illicit activity. The Detection Layer learns from abandonments without requiring identity information.
+
+The objection assumes that prosecution is the primary goal. If the goal is prevention, abandonment is success.
+
+\subsection{``This Prevents Investigation of Serious Crime''}
+
+The framework does not prevent investigation; it prevents \textit{mass surveillance}. Traditional investigative methods remain available:
+
+\begin{itemize}
+    \item Subpoenas can compel individuals to produce transaction records.
+    \item Court orders can require wallet providers to produce identity information for specific users.
+    \item Undercover operations can infiltrate criminal networks.
+    \item Threshold key activation can enable identity access for specific transactions when authorized by governance processes.
+\end{itemize}
+
+What the framework prevents is \textit{bulk access}---the ability to retrospectively search all transactions for patterns associated with individuals. This capability is not necessary for targeted investigation and creates surveillance risks that extend far beyond crime prevention.
+
+The distinction between government and commercial surveillance matters here. As \citet{Tucker2023} notes, referenced in the IMF's 2024 policy framework on CBDC data use, commercial entities cannot confiscate property or incarcerate individuals---state surveillance capabilities differ qualitatively from private data collection \citep{IMF2024CBDC}. Legal scholars have argued that CBDC ``should provide at least the same privacy-preserving features as cash'' with law enforcement access ``strictly controlled by due process'' \citep{UFLaw2024}. The proposed framework implements this principle architecturally rather than through policy commitment.
+
+\subsection{``States Will Never Adopt This''}
+
+Likely accurate as a prediction. The paper is normative (what CBDCs \textit{should} be) rather than predictive (what CBDCs \textit{will} be).
+
+The purpose is to establish that privacy-preserving alternatives exist, foreclosing the argument that surveillance is technically necessary. When policymakers claim that CBDC surveillance is required for security, the existence of viable alternatives reveals this as a policy choice rather than technical constraint.
+
+Additionally, state preferences are not monolithic. Smaller jurisdictions seeking to attract digital finance activity may find privacy-preserving architecture competitively advantageous. Civil society pressure and democratic accountability may influence design choices in some contexts.
+
+\subsection{``High-Frequency Transactions Cannot Be Individually Reviewed''}
+
+Correct. The framework assumes that most transactions proceed without intervention. Only flagged transactions require attention.
+
+For algorithmic trading or high-frequency payment systems, detection thresholds can be calibrated to flag only extreme anomalies. Alternatively, institutional accounts can be subject to different regimes (accepting identity registration in exchange for reduced friction) without compromising retail privacy.
+
+The framework's scalability depends on flag rates. If 0.1\% of transactions are flagged, a system processing 1 million transactions per day generates 1,000 flags---manageable with automated triage and human review for complex cases.
+
+\subsection{``Graph-Only Detection Is Measurably Worse''}
+
+Simulation evidence confirms a 5--13\% AUC gap between graph-only and identity-aware detection under realistic conditions. This objection deserves direct engagement rather than dismissal.
+
+However, the comparison obscures the relevant policy question. First, the gap depends entirely on launderers' ability to spread activity across multiple wallets. In KYC-constrained CBDC environments---the relevant deployment context---sybil attacks are costly. When launderers are limited to 1--2 wallets (same as legitimate users), graph-only achieves 94.9\% AUC, reducing the gap to under 2\%.
+
+Second, watchlist access---the core surveillance capability that justifies identity-linked monitoring---provides zero detection improvement. The identity-aware advantage comes entirely from cross-wallet linking, not surveillance databases. This is achievable through pseudonymous techniques.
+
+Third, the comparison ignores countervailing costs. Public sentiment data reveals profound opposition to financial surveillance: 2.96 million UK citizens petitioned against digital identity infrastructure (the fourth-largest petition in UK parliamentary history) \citep{Statewatch2025}; 41\% of ECB CBDC consultation responses focused on privacy concerns \citep{ECBConsultation2021}; 73\% of surveyed public express concern about government control over fund access \citep{OxfordCBDCSurvey2025}. Support for digital identity drops from 57\% to 38\% after respondents learn about privacy implications \citep{Ipsos2025}.
+
+The question is not ``which system performs better in isolation?'' but ``is 5--13\% improved detection worth mass financial surveillance given available alternatives?'' When pseudonymous linking captures nearly all the detection benefit, and when public trust is essential for CBDC adoption, the answer is clearly no.
+
+
+\section{Governance Framework}
+
+\subsection{Parameter Oversight}
+
+Privacy-preserving architecture does not mean ungoverned architecture. Key parameters require ongoing governance:
+
+\textbf{Detection thresholds:} How sensitive should anomaly detection be? Higher sensitivity catches more illicit activity but generates more false positives. This is a policy decision requiring democratic input.
+
+\textbf{Timeout periods:} How long should parties have to respond to flags? Longer periods accommodate legitimate users; shorter periods reduce friction for illicit abandonment strategies.
+
+\textbf{Pattern libraries:} Which transaction patterns trigger flags? Pattern definitions should be publicly auditable to enable scrutiny and prevent discriminatory targeting.
+
+\textbf{Threshold key holders:} Who holds shares of emergency access keys? Distribution across independent institutions prevents capture while maintaining emergency capability.
+
+\subsection{Audit and Transparency}
+
+\textbf{Detection statistics:} Aggregate statistics on flag rates, resolution outcomes, and abandonment patterns should be publicly published. This enables assessment of system effectiveness without compromising individual privacy.
+
+\textbf{Resolution review:} Independent auditors should periodically review Resolution Layer decisions to assess consistency and detect potential abuse.
+
+\textbf{Code audit:} System source code should be publicly available for security review. Cryptographic implementations should be formally verified where possible.
+
+\textbf{Threshold key usage:} Any activation of emergency identity access should be publicly logged with justification. Unauthorized access attempts should trigger alerts and investigation.
+
+\subsection{Democratic Accountability}
+
+Privacy-preserving CBDC represents a fundamental choice about the relationship between citizens and state in financial matters. This choice should be made through democratic processes, not technical default. The framework aligns with stakes-weighted consent models of political legitimacy, where governance structures must demonstrate alignment with stakeholder preferences proportional to the stakes involved \citep{Farzulla2025DoCS}. CBDC design imposes differential stakes across populations---financial privacy affects marginalized communities, political dissidents, and economically vulnerable individuals more acutely than it affects those with institutional access---and governance structures should reflect this heterogeneity.
+
+Governance structures should include:
+
+\begin{itemize}
+    \item Legislative authorization specifying privacy requirements
+    \item Independent oversight body with authority to audit compliance
+    \item Public reporting on system operation and governance decisions
+    \item Mechanisms for citizen input on parameter adjustments
+    \item Sunset clauses requiring periodic reauthorization
+\end{itemize}
+
+
+\section{Conclusion}
+
+\subsection{Summary of Contributions}
+
+This paper has argued that the surveillance assumption underlying current CBDC proposals is a policy choice rather than technical necessity. Privacy-preserving architecture is feasible using established cryptographic primitives and can achieve equivalent or superior crime prevention through mechanism design rather than identity monitoring.
+
+The proposed framework contributes three innovations to CBDC design discourse:
+
+\textbf{Separation of pattern from identity:} Demonstrating that transaction anomaly detection does not require identity access, only transaction graph analysis.
+
+\textbf{Abandonment as deterrent:} Showing that allowing users to abandon suspicious transactions without consequence creates effective crime prevention by making illicit transactions impossible to complete, without requiring identity compromise.
+
+\textbf{Architectural enforcement:} Distinguishing between policy privacy (``we promise not to surveil'') and structural privacy (``we cannot surveil because the capability does not exist''), and demonstrating how to achieve the latter.
+
+\subsection{Policy Implications}
+
+The existence of privacy-preserving alternatives has immediate policy implications:
+
+Claims that CBDC surveillance is necessary for security should be challenged. Alternative architectures exist. The question is not whether privacy is technically possible but whether it is politically chosen.
+
+CBDC design processes should explicitly consider privacy-preserving options. Public consultations that present only surveillance-based designs foreclose democratic choice on fundamental questions.
+
+International standards (FATF, BIS) should accommodate privacy-preserving architectures. Current guidance assumes identity-linked monitoring; updated guidance should recognize alternative mechanisms.
+
+\subsection{Limitations and Future Work}
+
+This paper has focused on conceptual architecture rather than complete technical specification. Implementation details---specific protocol designs, performance benchmarks, user interface considerations---require further development.
+
+The framework's core assumption---that pattern detection can effectively identify illicit transactions without identity information---has been validated through agent-based simulation (Section 4.5). Results confirm that graph-only approaches achieve 87--95\% of surveillance-based detection performance, with the gap driven primarily by cross-wallet activity dilution rather than lack of surveillance data. More significantly, watchlist access provides zero marginal improvement under the conditions tested, suggesting that the surveillance apparatus justifying identity-linked monitoring adds limited detection value beyond what pseudonymous linking achieves. Simulation code and detailed methodology are available at the paper's repository.
+
+Several limitations merit acknowledgment. First, the simulation models relatively unsophisticated laundering behavior; real-world sophisticated actors may exhibit different evasion patterns. Second, the 500/50 legitimate/launderer ratio, while reasonable for simulation, may not reflect actual prevalence rates. Third, graph topology features depend on network structure that may differ in deployed CBDC systems.
+
+\subsection{Implementation Challenges}
+
+Translating the proposed architecture into deployed systems raises technical challenges that future work must address.
+
+\textbf{Private Graph Computation.} The Detection Layer requires computing graph features (degree centrality, PageRank, clustering coefficients) over transaction data without exposing individual transactions. Secure multi-party computation and homomorphic encryption can theoretically enable such computations, but practical implementations at CBDC throughput (potentially millions of transactions per second) remain an open research problem. Trusted execution environments offer a pragmatic intermediate solution, though with weaker security guarantees. The architecture does not depend on any specific implementation; rather, it specifies \textit{what} must be computed privately, leaving \textit{how} to evolving cryptographic engineering.
+
+\textbf{The Sybil-Privacy Tradeoff.} The architecture's robustness to sybil attacks (launderers creating many wallets) depends on limiting wallet creation. Two design points exist: (1) KYC-constrained systems where wallet creation requires identity verification, achieving strong sybil resistance but introducing identity touchpoints; or (2) resource-constrained systems using proof-of-work, staking, or rate-limiting for wallet creation, preserving stronger privacy but with weaker sybil guarantees. This paper has analyzed both scenarios (Section 4.5) but a deployed system must choose a position on this tradeoff. The key insight---that surveillance infrastructure adds minimal value \textit{given} sybil constraints---holds across both design points.
+
+\textbf{Pseudonymous Linking Protocols.} Cross-wallet linking without identity revelation requires users to prove ``I control wallets A, B, and C'' without revealing which user makes the claim. Ring signatures, accumulator-based proofs, and composable SNARKs \citep{Campanelli2017} offer cryptographic building blocks, but constructing a complete protocol that resists correlation attacks over time while enabling aggregate risk assessment requires careful design. The emerging literature on privacy-preserving compliance \citep{Bunz2020} and confidential transactions provides foundations, but CBDC-specific instantiation remains future work.
+
+\textbf{Relation to Privacy-Enhancing Technologies for AML.} A mature literature explores privacy-set intersection for watchlist matching, homomorphic encryption for encrypted flow tracing, and federated learning for collaborative detection without data sharing. These techniques are largely complementary to the proposed architecture: they address \textit{how} to implement privacy-preserving detection, while this paper addresses \textit{whether} such detection can achieve adequate effectiveness. Future work should integrate specific PET protocols into the architectural framework and benchmark performance against traditional approaches.
+
+Interoperability with existing financial infrastructure and cross-border coordination mechanisms present additional challenges not fully addressed here. Future work should examine how privacy-preserving CBDC systems interact with traditional banking AML requirements and international regulatory frameworks.
+
+\subsection{Concluding Remarks}
+
+CBDCs will reshape monetary infrastructure for generations. The design decisions made now will determine whether digital currency enables financial freedom or financial control.
+
+The false dichotomy between privacy and security has obscured the range of available choices. Privacy-preserving CBDC architecture is technically feasible and potentially more effective at crime prevention than surveillance-based alternatives. The choice to build surveillance infrastructure is a choice, not a necessity.
+
+This paper has attempted to expand the design space by demonstrating that alternatives exist. The political choice remains with democratic societies---but it should be recognized as a choice, made deliberately and accountably, rather than accepted as technical inevitability.
+
+% ============================================================================
+% REFERENCES
+% ============================================================================
+
+\clearpage
+\onecolumn
+
+\bibliography{references}
+
+\end{document}
