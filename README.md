@@ -15,9 +15,20 @@ This paper challenges the assumption that comprehensive transaction surveillance
 ```
 main.tex          # LaTeX source
 references.bib    # BibTeX bibliography
+pet_aml_sim.py    # PET AML stack simulation (Section 5.4)
 ```
 
-## Building
+## Simulation
+
+The `pet_aml_sim.py` script simulates the PET AML stack described in Section 5.4, including PSI watchlist screening, ZK policy proof generation/verification, secure MPC risk propagation, and queueing delays. No external dependencies — pure Python 3.
+
+```bash
+python pet_aml_sim.py --days 2 --tx-per-day 20000 --psps 8 --seed 7
+```
+
+Run `python pet_aml_sim.py --help` for all options.
+
+## Building the Paper
 
 Requires a LaTeX distribution (e.g., TeX Live, MiKTeX) with `pdflatex`, `bibtex`, and standard packages.
 
