@@ -634,7 +634,7 @@ Secure risk propagation (batch) & seconds--minutes per batch (e.g., hourly/daily
 \subsubsection{Simulation validation}
 \label{sec:pet-aml-simulation}
 
-To validate the performance envelope described in Table~\ref{tab:pet-aml-envelope}, we implement a discrete-event simulation of the PET--AML stack (\texttt{pet\_aml\_sim.py}).\footnote{Simulation source code is available in the paper's repository at \url{https://github.com/murad-farzulla/CBDC}.} The simulator models 1{,}000 wallets distributed across four risk tiers (0--3), generates transactions with lognormal amount distributions, and exercises all three stack components: PSI-based watchlist screening, ZK policy proof verification, and batch MPC risk propagation.
+To validate the performance envelope described in Table~\ref{tab:pet-aml-envelope}, we implement a discrete-event simulation of the PET--AML stack (\texttt{pet\_aml\_sim.py}).\footnote{Simulation source code is available in the paper's repository at \url{https://github.com/andrewmaksakov/CBDC}.} The simulator models 1{,}000 wallets distributed across four risk tiers (0--3), generates transactions with lognormal amount distributions, and exercises all three stack components: PSI-based watchlist screening, ZK policy proof verification, and batch MPC risk propagation.
 
 Table~\ref{tab:sim-results} summarises the key metrics from a representative run.
 
