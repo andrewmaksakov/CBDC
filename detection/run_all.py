@@ -96,9 +96,18 @@ def run_world(cfg: DGPConfig, delta: float, run_controls: bool) -> dict:
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--seed", type=int, default=20260707)
-    ap.add_argument("--n-entities", type=int, default=800)
+    # n=8000 is canonical (24 Jul): 800 gives ~29 launderers, at which every
+    # average-precision comparison is INCONCLUSIVE and the thesis rests on AUC
+    # alone at low power. 8000 gives ~388 and separately identifies the tiers.
+    ap.add_argument("--n-entities", type=int, default=8000)
+    ap.add_argument("--obfuscation", type=float, default=None,
+                    help="override default-world obfuscation (0=blatant, "
+                         "1=heavy cover); leave unset for the DGP default. "
+                         "Does not affect the surveillance_strong world.")
     ap.add_argument("--delta", type=float, default=0.03,
-                    help="pre-registered TOST equivalence margin (AUC)")
+                    help="TOST equivalence margin; applies to AUC directly. "
+                         "For AP prefer the reported equiv_bound (the margin "
+                         "was set for AUC before any AP result existed).")
     args = ap.parse_args()
     os.makedirs(RESULTS_DIR, exist_ok=True)
 
@@ -106,6 +115,8 @@ def main():
 
     cfg = default_config(args.seed)
     cfg.n_entities = args.n_entities
+    if args.obfuscation is not None:
+        cfg.obfuscation = args.obfuscation
     try:
         summary["worlds"]["default"] = run_world(cfg, args.delta,
                                                  run_controls=True)
