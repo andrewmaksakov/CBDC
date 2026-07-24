@@ -1,0 +1,18 @@
+{
+  "comparison": "T3 vs T2 (gboost)",
+  "metric": "ap",
+  "delta_margin": 0.03,
+  "alpha": 0.05,
+  "n_boot": 2000,
+  "n_entities": 8000,
+  "n_launderers": 388,
+  "d_point": 0.12912479221136997,
+  "d_ci90": [
+    0.10721728493535038,
+    0.1516854041594048
+  ],
+  "equiv_bound": 0.1516854041594048,
+  "boot_frac_above_margin": 1.0,
+  "boot_frac_below_neg_margin": 0.0,
+  "verdict": "SURVEILLANCE_SUPERIOR"
+}

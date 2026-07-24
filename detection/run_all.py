@@ -76,15 +76,20 @@ def run_world(cfg: DGPConfig, delta: float, run_controls: bool) -> dict:
         world["label_permutation_auc"] = perm_auc
 
     print()
+    # Both metrics, always. AUC saturates at these operating points; AP does
+    # not, and the two can return opposite verdicts on identical scores. A
+    # verdict without its metric is not interpretable — see equivalence_test.
     for model in ("logit", "gboost"):
         for hi in ("T3", "T4"):
-            res = tost_equivalence(oof, tier_lo="T2", tier_hi=hi,
-                                   model=model, delta=delta, seed=cfg.seed)
-            print_tost(res)
-            world["tost"][f"T2_vs_{hi}_{model}"] = res
-            with open(f"{RESULTS_DIR}/tost_{label}_T2_vs_{hi}_{model}.json",
-                      "w") as f:
-                json.dump(res, f, indent=2)
+            for metric in ("auc", "ap"):
+                res = tost_equivalence(oof, tier_lo="T2", tier_hi=hi,
+                                       model=model, delta=delta,
+                                       seed=cfg.seed, metric=metric)
+                print_tost(res)
+                key = f"T2_vs_{hi}_{model}_{metric}"
+                world["tost"][key] = res
+                with open(f"{RESULTS_DIR}/tost_{label}_{key}.json", "w") as f:
+                    json.dump(res, f, indent=2)
     return world
 
 
@@ -127,9 +132,15 @@ def main():
           "expect SURVEILLANCE_SUPERIOR):")
     for k, v in strong_verdicts.items():
         print(f"  {k}: {v}")
-    if all(v == "EQUIVALENT" for v in strong_verdicts.values()):
-        print("WARNING: harness returned EQUIVALENT on a world built to "
-              "falsify the thesis — the harness is rigged, do not use.")
+    # Requires a positive SURVEILLANCE_SUPERIOR, not merely the absence of
+    # unanimous equivalence: since 24 Jul this loop reports two metrics per
+    # comparison, and "not all EQUIVALENT" would be satisfied by a single
+    # INCONCLUSIVE, which is an absence of evidence rather than the falsifying
+    # result the world was built to produce.
+    if not any(v == "SURVEILLANCE_SUPERIOR" for v in strong_verdicts.values()):
+        print("WARNING: a world built to falsify the thesis did not return "
+              "SURVEILLANCE_SUPERIOR on any comparison — the harness cannot "
+              "detect the effect it claims to rule out, do not use.")
         sys.exit(2)
     print("\nall results written to results/")
 

@@ -1,0 +1,23 @@
+{
+  "comparison": "T3 vs T2 (logit)",
+  "metric": "auc",
+  "delta_margin": 0.03,
+  "alpha": 0.05,
+  "n_boot": 2000,
+  "n_entities": 8000,
+  "n_launderers": 388,
+  "d_point": 0.10408653455477246,
+  "d_ci90": [
+    0.0893050337611998,
+    0.11992775241175284
+  ],
+  "equiv_bound": 0.11992775241175284,
+  "boot_frac_above_margin": 1.0,
+  "boot_frac_below_neg_margin": 0.0,
+  "verdict": "SURVEILLANCE_SUPERIOR",
+  "dAUC_point": 0.10408653455477246,
+  "dAUC_ci90": [
+    0.0893050337611998,
+    0.11992775241175284
+  ]
+}

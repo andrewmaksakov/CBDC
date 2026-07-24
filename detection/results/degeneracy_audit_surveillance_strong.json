@@ -1,9 +1,9 @@
 {
-  "n_entities": 800,
-  "n_launderers": 29,
+  "n_entities": 8000,
+  "n_launderers": 388,
   "auc_cap": 0.95,
   "worst_feature": "jurisdiction_risk",
-  "worst_auc": 0.874189364461738,
+  "worst_auc": 0.8871931730149357,
   "gate1_pass": true,
   "gate2_pass": true,
   "violations": [],
@@ -12,338 +12,338 @@
     {
       "feature": "jurisdiction_risk",
       "level": "entity",
-      "auc": 0.874189364461738,
-      "ks_stat": 0.586654143745248
-    },
-    {
-      "feature": "prior_sar_count",
-      "level": "entity",
-      "auc": 0.8463705890245538,
-      "ks_stat": 0.6774453240305917
-    },
-    {
-      "feature": "ent_n_in",
-      "level": "entity",
-      "auc": 0.7950936982870433,
-      "ks_stat": 0.698331767968156
-    },
-    {
-      "feature": "kyc_tier",
-      "level": "entity",
-      "auc": 0.7822129791135561,
-      "ks_stat": 0.42224607540587683
+      "auc": 0.8871931730149357,
+      "ks_stat": 0.6177522197723616
     },
     {
       "feature": "on_watchlist",
       "level": "entity",
-      "auc": 0.749541571626638,
-      "ks_stat": 0.4990831432532761
+      "auc": 0.8528266546039623,
+      "ks_stat": 0.7056533092079246
     },
     {
-      "feature": "ent_total_in",
+      "feature": "prior_sar_count",
       "level": "entity",
-      "auc": 0.7478867570105998,
-      "ks_stat": 0.5167494073974686
+      "auc": 0.8342755063898023,
+      "ks_stat": 0.6521295729477602
     },
     {
-      "feature": "n_in[wallet-max-hi]",
-      "level": "wallet",
-      "auc": 0.7445547654188469,
-      "ks_stat": NaN
-    },
-    {
-      "feature": "frac_fast_value[wallet-max-lo]",
-      "level": "wallet",
-      "auc": 0.7422514423721991,
-      "ks_stat": NaN
-    },
-    {
-      "feature": "w_frac_fast_mean",
+      "feature": "ent_n_in",
       "level": "entity",
-      "auc": 0.7384945659465987,
-      "ks_stat": 0.4338297777181448
+      "auc": 0.8089323152266362,
+      "ks_stat": 0.7181647534278486
     },
     {
-      "feature": "n_in[wallet-max-lo]",
-      "level": "wallet",
-      "auc": 0.7328816136678742,
-      "ks_stat": NaN
+      "feature": "kyc_tier",
+      "level": "entity",
+      "auc": 0.8080408172662806,
+      "ks_stat": 0.4902175620696567
+    },
+    {
+      "feature": "internal_vol",
+      "level": "entity",
+      "auc": 0.7502307466236166,
+      "ks_stat": 0.47380289396557795
     },
     {
       "feature": "in_degree[wallet-max-hi]",
       "level": "wallet",
-      "auc": 0.7157744085155865,
+      "auc": 0.7485056489753023,
       "ks_stat": NaN
+    },
+    {
+      "feature": "n_in[wallet-max-hi]",
+      "level": "wallet",
+      "auc": 0.7453127793337704,
+      "ks_stat": NaN
+    },
+    {
+      "feature": "ent_total_in",
+      "level": "entity",
+      "auc": 0.7418092566809865,
+      "ks_stat": 0.48295691555926346
+    },
+    {
+      "feature": "w_frac_fast_mean",
+      "level": "entity",
+      "auc": 0.719628800970795,
+      "ks_stat": 0.368491692444377
     },
     {
       "feature": "total_in[wallet-max-hi]",
       "level": "wallet",
-      "auc": 0.7145668410930722,
+      "auc": 0.7126559528904444,
+      "ks_stat": NaN
+    },
+    {
+      "feature": "n_in[wallet-max-lo]",
+      "level": "wallet",
+      "auc": 0.7117234859771062,
       "ks_stat": NaN
     },
     {
       "feature": "chain_fast_value",
       "level": "entity",
-      "auc": 0.6989802763987656,
-      "ks_stat": 0.41987566528020037
+      "auc": 0.7069658393421132,
+      "ks_stat": 0.3889314755323932
     },
     {
-      "feature": "internal_vol",
+      "feature": "frac_fast_value[wallet-max-lo]",
+      "level": "wallet",
+      "auc": 0.6883545920440325,
+      "ks_stat": NaN
+    },
+    {
+      "feature": "account_age_days",
       "level": "entity",
-      "auc": 0.698331767968156,
-      "ks_stat": 0.4276577664475155
+      "auc": 0.6756159563575689,
+      "ks_stat": 0.25960908169954117
     },
     {
-      "feature": "n_out[wallet-max-hi]",
-      "level": "wallet",
-      "auc": 0.6800169953933539,
-      "ks_stat": NaN
-    },
-    {
-      "feature": "total_in[wallet-max-lo]",
-      "level": "wallet",
-      "auc": 0.670065745337448,
-      "ks_stat": NaN
-    },
-    {
-      "feature": "total_out[wallet-max-lo]",
-      "level": "wallet",
-      "auc": 0.6659957958763809,
-      "ks_stat": NaN
-    },
-    {
-      "feature": "n_out[wallet-max-lo]",
-      "level": "wallet",
-      "auc": 0.6643186189006665,
-      "ks_stat": NaN
-    },
-    {
-      "feature": "in_degree[wallet-max-lo]",
-      "level": "wallet",
-      "auc": 0.6556196609866274,
-      "ks_stat": NaN
-    },
-    {
-      "feature": "median_out_lag[wallet-max-hi]",
-      "level": "wallet",
-      "auc": 0.6533610626593318,
-      "ks_stat": NaN
-    },
-    {
-      "feature": "out_degree[wallet-max-hi]",
-      "level": "wallet",
-      "auc": 0.6473008631870836,
-      "ks_stat": NaN
-    },
-    {
-      "feature": "mean_out[wallet-max-lo]",
-      "level": "wallet",
-      "auc": 0.6472114137483788,
-      "ks_stat": NaN
-    },
-    {
-      "feature": "flow_ratio[wallet-max-hi]",
-      "level": "wallet",
-      "auc": 0.6453777002549308,
-      "ks_stat": NaN
-    },
-    {
-      "feature": "w_flow_ratio_max",
+      "feature": "w_min_out_lag",
       "level": "entity",
-      "auc": 0.6453777002549308,
-      "ks_stat": 0.3373138333556957
+      "auc": 0.6685093666538455,
+      "ks_stat": 0.3009382905992167
     },
     {
-      "feature": "ent_n_out",
-      "level": "entity",
-      "auc": 0.6379533968424348,
-      "ks_stat": 0.22420501811351135
-    },
-    {
-      "feature": "burstiness[wallet-max-lo]",
+      "feature": "median_out_lag[wallet-max-lo]",
       "level": "wallet",
-      "auc": 0.6347332170490629,
+      "auc": 0.6685093666538455,
       "ks_stat": NaN
-    },
-    {
-      "feature": "max_in[wallet-max-lo]",
-      "level": "wallet",
-      "auc": 0.6340176215394249,
-      "ks_stat": NaN
-    },
-    {
-      "feature": "out_degree[wallet-max-lo]",
-      "level": "wallet",
-      "auc": 0.6317590232121294,
-      "ks_stat": NaN
-    },
-    {
-      "feature": "internal_share",
-      "level": "entity",
-      "auc": 0.6290084529719575,
-      "ks_stat": 0.3058276309316159
     },
     {
       "feature": "frac_fast_value[wallet-max-hi]",
       "level": "wallet",
-      "auc": 0.6268616664430431,
+      "auc": 0.6662520112031463,
       "ks_stat": NaN
     },
     {
       "feature": "w_frac_fast_max",
       "level": "entity",
-      "auc": 0.6268616664430431,
-      "ks_stat": 0.3004606646093296
+      "auc": 0.6662520112031463,
+      "ks_stat": 0.2948911377044385
     },
     {
-      "feature": "amount_cv[wallet-max-hi]",
+      "feature": "mean_out[wallet-max-lo]",
       "level": "wallet",
-      "auc": 0.6262355203721096,
+      "auc": 0.66452928365955,
       "ks_stat": NaN
     },
     {
-      "feature": "w_min_out_lag",
-      "level": "entity",
-      "auc": 0.6219419473142807,
-      "ks_stat": 0.30229437810277743
-    },
-    {
-      "feature": "median_out_lag[wallet-max-lo]",
+      "feature": "total_in[wallet-max-lo]",
       "level": "wallet",
-      "auc": 0.6219419473142807,
+      "auc": 0.6558059439517636,
       "ks_stat": NaN
-    },
-    {
-      "feature": "w_burst_mean",
-      "level": "entity",
-      "auc": 0.6167091551500514,
-      "ks_stat": 0.2053311865468044
     },
     {
       "feature": "total_out[wallet-max-hi]",
       "level": "wallet",
-      "auc": 0.6108054921955365,
+      "auc": 0.6534829027417371,
       "ks_stat": NaN
     },
     {
-      "feature": "ent_max_in",
-      "level": "entity",
-      "auc": 0.6065119191377074,
-      "ks_stat": 0.26620152958540183
-    },
-    {
-      "feature": "n_ext_counterparties",
-      "level": "entity",
-      "auc": 0.594190258956125,
-      "ks_stat": 0.21508117536562457
-    },
-    {
-      "feature": "max_out[wallet-max-lo]",
+      "feature": "total_out[wallet-max-lo]",
       "level": "wallet",
-      "auc": 0.5892034527483341,
+      "auc": 0.6522606058800267,
       "ks_stat": NaN
     },
     {
-      "feature": "burstiness[wallet-max-hi]",
+      "feature": "amount_cv[wallet-max-hi]",
       "level": "wallet",
-      "auc": 0.584462632496981,
+      "auc": 0.6483892091163708,
+      "ks_stat": NaN
+    },
+    {
+      "feature": "median_out_lag[wallet-max-hi]",
+      "level": "wallet",
+      "auc": 0.6401205909280518,
+      "ks_stat": NaN
+    },
+    {
+      "feature": "in_degree[wallet-max-lo]",
+      "level": "wallet",
+      "auc": 0.6388260058724424,
       "ks_stat": NaN
     },
     {
       "feature": "ent_total_out",
       "level": "entity",
-      "auc": 0.5826736437228857,
-      "ks_stat": 0.24370499575115165
+      "auc": 0.6358469535351127,
+      "ks_stat": 0.2760481280235764
     },
     {
-      "feature": "max_in[wallet-max-hi]",
-      "level": "wallet",
-      "auc": 0.5811530032649046,
-      "ks_stat": NaN
-    },
-    {
-      "feature": "flow_ratio[wallet-max-lo]",
-      "level": "wallet",
-      "auc": 0.5808846549487902,
-      "ks_stat": NaN
-    },
-    {
-      "feature": "mean_in[wallet-max-lo]",
-      "level": "wallet",
-      "auc": 0.5766805313296659,
-      "ks_stat": NaN
-    },
-    {
-      "feature": "num_wallets",
+      "feature": "internal_share",
       "level": "entity",
-      "auc": 0.5669305425108457,
-      "ks_stat": 0.17473947850977234
+      "auc": 0.6214880126875092,
+      "ks_stat": 0.2606085887177598
     },
     {
-      "feature": "w_near_thr_mean",
-      "level": "entity",
-      "auc": 0.565231003175455,
-      "ks_stat": 0.18502616396082114
-    },
-    {
-      "feature": "max_out[wallet-max-hi]",
+      "feature": "n_out[wallet-max-hi]",
       "level": "wallet",
-      "auc": 0.565231003175455,
-      "ks_stat": NaN
-    },
-    {
-      "feature": "ent_flow_ratio",
-      "level": "entity",
-      "auc": 0.5594167896596449,
-      "ks_stat": 0.20783577083053803
-    },
-    {
-      "feature": "ent_near_thr_frac",
-      "level": "entity",
-      "auc": 0.557113466612997,
-      "ks_stat": 0.13292186591529137
-    },
-    {
-      "feature": "near_thr_frac[wallet-max-hi]",
-      "level": "wallet",
-      "auc": 0.55445234581153,
+      "auc": 0.6164149728318282,
       "ks_stat": NaN
     },
     {
       "feature": "amount_cv[wallet-max-lo]",
       "level": "wallet",
-      "auc": 0.5516794132116821,
+      "auc": 0.6161710213390685,
       "ks_stat": NaN
+    },
+    {
+      "feature": "flow_ratio[wallet-max-hi]",
+      "level": "wallet",
+      "auc": 0.6085521504298692,
+      "ks_stat": NaN
+    },
+    {
+      "feature": "w_flow_ratio_max",
+      "level": "entity",
+      "auc": 0.6085521504298692,
+      "ks_stat": 0.2375481469844142
     },
     {
       "feature": "mean_in[wallet-max-hi]",
       "level": "wallet",
-      "auc": 0.5467149693635672,
+      "auc": 0.6005994333418205,
+      "ks_stat": NaN
+    },
+    {
+      "feature": "max_out[wallet-max-lo]",
+      "level": "wallet",
+      "auc": 0.5981514537545167,
+      "ks_stat": NaN
+    },
+    {
+      "feature": "n_out[wallet-max-lo]",
+      "level": "wallet",
+      "auc": 0.5912652837895671,
+      "ks_stat": NaN
+    },
+    {
+      "feature": "max_in[wallet-max-lo]",
+      "level": "wallet",
+      "auc": 0.5904117075046996,
+      "ks_stat": NaN
+    },
+    {
+      "feature": "flow_ratio[wallet-max-lo]",
+      "level": "wallet",
+      "auc": 0.5887468782335,
+      "ks_stat": NaN
+    },
+    {
+      "feature": "burstiness[wallet-max-hi]",
+      "level": "wallet",
+      "auc": 0.5820374503632355,
+      "ks_stat": NaN
+    },
+    {
+      "feature": "ent_n_out",
+      "level": "entity",
+      "auc": 0.5778190025515869,
+      "ks_stat": 0.11968893391335439
+    },
+    {
+      "feature": "w_burst_mean",
+      "level": "entity",
+      "auc": 0.5756754121273518,
+      "ks_stat": 0.13156248137774865
+    },
+    {
+      "feature": "n_ext_counterparties",
+      "level": "entity",
+      "auc": 0.5728551568061282,
+      "ks_stat": 0.15098650530090849
+    },
+    {
+      "feature": "mean_out[wallet-max-hi]",
+      "level": "wallet",
+      "auc": 0.5701906512235159,
+      "ks_stat": NaN
+    },
+    {
+      "feature": "burstiness[wallet-max-lo]",
+      "level": "wallet",
+      "auc": 0.5624966141361172,
+      "ks_stat": NaN
+    },
+    {
+      "feature": "out_degree[wallet-max-hi]",
+      "level": "wallet",
+      "auc": 0.561411275468468,
+      "ks_stat": NaN
+    },
+    {
+      "feature": "out_degree[wallet-max-lo]",
+      "level": "wallet",
+      "auc": 0.5598400653336295,
+      "ks_stat": NaN
+    },
+    {
+      "feature": "ent_max_in",
+      "level": "entity",
+      "auc": 0.5535900991922683,
+      "ks_stat": 0.10733865681425421
+    },
+    {
+      "feature": "mean_in[wallet-max-lo]",
+      "level": "wallet",
+      "auc": 0.5457971948794903,
+      "ks_stat": NaN
+    },
+    {
+      "feature": "max_in[wallet-max-hi]",
+      "level": "wallet",
+      "auc": 0.5393125883710475,
       "ks_stat": NaN
     },
     {
       "feature": "chain_fast_share",
       "level": "entity",
-      "auc": 0.5430699047363478,
-      "ks_stat": 0.15993559640413257
+      "auc": 0.5331582728843768,
+      "ks_stat": 0.1397237676809812
     },
     {
-      "feature": "account_age_days",
+      "feature": "ent_flow_ratio",
       "level": "entity",
-      "auc": 0.5414821771993381,
-      "ks_stat": 0.12920971420904334
+      "auc": 0.5165677091515837,
+      "ks_stat": 0.1190090524456772
+    },
+    {
+      "feature": "max_out[wallet-max-hi]",
+      "level": "wallet",
+      "auc": 0.5078243928468885,
+      "ks_stat": NaN
+    },
+    {
+      "feature": "near_thr_frac[wallet-max-hi]",
+      "level": "wallet",
+      "auc": 0.5071766770860984,
+      "ks_stat": NaN
+    },
+    {
+      "feature": "w_near_thr_mean",
+      "level": "entity",
+      "auc": 0.5060276841774517,
+      "ks_stat": 0.06349442822239437
+    },
+    {
+      "feature": "num_wallets",
+      "level": "entity",
+      "auc": 0.5052372542539995,
+      "ks_stat": 0.014620160246165848
     },
     {
       "feature": "near_thr_frac[wallet-max-lo]",
       "level": "wallet",
-      "auc": 0.5308824187128226,
+      "auc": 0.5048646399336912,
       "ks_stat": NaN
     },
     {
-      "feature": "mean_out[wallet-max-hi]",
-      "level": "wallet",
-      "auc": 0.5119191377074108,
-      "ks_stat": NaN
+      "feature": "ent_near_thr_frac",
+      "level": "entity",
+      "auc": 0.5009092737457406,
+      "ks_stat": 0.05480223846233023
     }
   ]
 }

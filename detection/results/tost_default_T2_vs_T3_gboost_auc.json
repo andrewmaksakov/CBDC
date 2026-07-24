@@ -1,0 +1,23 @@
+{
+  "comparison": "T3 vs T2 (gboost)",
+  "metric": "auc",
+  "delta_margin": 0.03,
+  "alpha": 0.05,
+  "n_boot": 2000,
+  "n_entities": 8000,
+  "n_launderers": 388,
+  "d_point": 0.00018114371773281235,
+  "d_ci90": [
+    -0.0005180839961273775,
+    0.0009187637080372898
+  ],
+  "equiv_bound": 0.0009187637080372898,
+  "boot_frac_above_margin": 0.0,
+  "boot_frac_below_neg_margin": 0.0,
+  "verdict": "EQUIVALENT",
+  "dAUC_point": 0.00018114371773281235,
+  "dAUC_ci90": [
+    -0.0005180839961273775,
+    0.0009187637080372898
+  ]
+}

@@ -1,15 +1,17 @@
 {
   "comparison": "T3 vs T2 (logit)",
+  "metric": "ap",
   "delta_margin": 0.03,
   "alpha": 0.05,
   "n_boot": 2000,
-  "n_entities": 800,
-  "n_launderers": 29,
-  "dAUC_point": 0.17125095040028626,
-  "dAUC_ci90": [
-    0.10525735116798007,
-    0.2391722958628945
+  "n_entities": 8000,
+  "n_launderers": 388,
+  "d_point": 0.3927050953330157,
+  "d_ci90": [
+    0.35229692282208475,
+    0.4321458590547113
   ],
+  "equiv_bound": 0.4321458590547113,
   "boot_frac_above_margin": 1.0,
   "boot_frac_below_neg_margin": 0.0,
   "verdict": "SURVEILLANCE_SUPERIOR"
