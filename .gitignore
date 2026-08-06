@@ -41,3 +41,10 @@ venv/
 .DS_Store
 Thumbs.db
 desktop.ini
+
+# working-branch artifact: the compiled manuscript is the point
+!main.pdf
+
+# confirmatory pilot outputs are regenerated; the summary is committed by hand
+detection/confirmatory/results/pilot_replicates.json
+detection/confirmatory/results/*.log

@@ -1,0 +1,18 @@
+{
+  "comparison": "T3 vs T2 (logit)",
+  "metric": "ap",
+  "delta_margin": 0.03,
+  "alpha": 0.05,
+  "n_boot": 2000,
+  "n_entities": 8000,
+  "n_launderers": 388,
+  "d_point": 0.03502732815076148,
+  "d_ci90": [
+    0.024710093692501572,
+    0.04621853187002939
+  ],
+  "equiv_bound": 0.04621853187002939,
+  "boot_frac_above_margin": 0.783,
+  "boot_frac_below_neg_margin": 0.0,
+  "verdict": "INCONCLUSIVE"
+}

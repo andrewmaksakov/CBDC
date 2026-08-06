@@ -37,6 +37,10 @@ import pandas as pd
 @dataclass
 class DGPConfig:
     seed: int = 20260707
+    # Cheap default for tests and the standalone degeneracy gate ONLY.
+    # The canonical experiment size is 8000, set by run_all.py --n-entities;
+    # at 800 only ~29 launderers survive and the tiers are not separately
+    # identified. Do not quote a result generated at this default.
     n_entities: int = 800
     base_rate: float = 0.05           # fraction of entities that launder
     sim_days: float = 120.0

@@ -1,6 +1,6 @@
 """Driver: regenerates every number in the detection pipeline.
 
-    python3 run_all.py [--seed 20260707] [--n-entities 800] [--delta 0.03]
+    python3 run_all.py [--seed 20260707] [--n-entities 8000] [--delta 0.03]
 
 Order of operations (the audit is a HARD GATE — nothing downstream runs
 if it fails):
@@ -76,24 +76,38 @@ def run_world(cfg: DGPConfig, delta: float, run_controls: bool) -> dict:
         world["label_permutation_auc"] = perm_auc
 
     print()
+    # Both metrics, always. AUC saturates at these operating points; AP does
+    # not, and the two can return opposite verdicts on identical scores. A
+    # verdict without its metric is not interpretable — see equivalence_test.
     for model in ("logit", "gboost"):
         for hi in ("T3", "T4"):
-            res = tost_equivalence(oof, tier_lo="T2", tier_hi=hi,
-                                   model=model, delta=delta, seed=cfg.seed)
-            print_tost(res)
-            world["tost"][f"T2_vs_{hi}_{model}"] = res
-            with open(f"{RESULTS_DIR}/tost_{label}_T2_vs_{hi}_{model}.json",
-                      "w") as f:
-                json.dump(res, f, indent=2)
+            for metric in ("auc", "ap"):
+                res = tost_equivalence(oof, tier_lo="T2", tier_hi=hi,
+                                       model=model, delta=delta,
+                                       seed=cfg.seed, metric=metric)
+                print_tost(res)
+                key = f"T2_vs_{hi}_{model}_{metric}"
+                world["tost"][key] = res
+                with open(f"{RESULTS_DIR}/tost_{label}_{key}.json", "w") as f:
+                    json.dump(res, f, indent=2)
     return world
 
 
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--seed", type=int, default=20260707)
-    ap.add_argument("--n-entities", type=int, default=800)
+    # n=8000 is canonical (24 Jul): 800 gives ~29 launderers, at which every
+    # average-precision comparison is INCONCLUSIVE and the thesis rests on AUC
+    # alone at low power. 8000 gives ~388 and separately identifies the tiers.
+    ap.add_argument("--n-entities", type=int, default=8000)
+    ap.add_argument("--obfuscation", type=float, default=None,
+                    help="override default-world obfuscation (0=blatant, "
+                         "1=heavy cover); leave unset for the DGP default. "
+                         "Does not affect the surveillance_strong world.")
     ap.add_argument("--delta", type=float, default=0.03,
-                    help="pre-registered TOST equivalence margin (AUC)")
+                    help="TOST equivalence margin; applies to AUC directly. "
+                         "For AP prefer the reported equiv_bound (the margin "
+                         "was set for AUC before any AP result existed).")
     args = ap.parse_args()
     os.makedirs(RESULTS_DIR, exist_ok=True)
 
@@ -101,6 +115,8 @@ def main():
 
     cfg = default_config(args.seed)
     cfg.n_entities = args.n_entities
+    if args.obfuscation is not None:
+        cfg.obfuscation = args.obfuscation
     try:
         summary["worlds"]["default"] = run_world(cfg, args.delta,
                                                  run_controls=True)
@@ -127,9 +143,15 @@ def main():
           "expect SURVEILLANCE_SUPERIOR):")
     for k, v in strong_verdicts.items():
         print(f"  {k}: {v}")
-    if all(v == "EQUIVALENT" for v in strong_verdicts.values()):
-        print("WARNING: harness returned EQUIVALENT on a world built to "
-              "falsify the thesis — the harness is rigged, do not use.")
+    # Requires a positive SURVEILLANCE_SUPERIOR, not merely the absence of
+    # unanimous equivalence: since 24 Jul this loop reports two metrics per
+    # comparison, and "not all EQUIVALENT" would be satisfied by a single
+    # INCONCLUSIVE, which is an absence of evidence rather than the falsifying
+    # result the world was built to produce.
+    if not any(v == "SURVEILLANCE_SUPERIOR" for v in strong_verdicts.values()):
+        print("WARNING: a world built to falsify the thesis did not return "
+              "SURVEILLANCE_SUPERIOR on any comparison — the harness cannot "
+              "detect the effect it claims to rule out, do not use.")
         sys.exit(2)
     print("\nall results written to results/")
 

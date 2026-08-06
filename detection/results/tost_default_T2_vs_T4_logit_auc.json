@@ -1,0 +1,23 @@
+{
+  "comparison": "T4 vs T2 (logit)",
+  "metric": "auc",
+  "delta_margin": 0.03,
+  "alpha": 0.05,
+  "n_boot": 2000,
+  "n_entities": 8000,
+  "n_launderers": 388,
+  "d_point": 0.010853386676490273,
+  "d_ci90": [
+    0.007037814502840511,
+    0.014883101777066471
+  ],
+  "equiv_bound": 0.014883101777066471,
+  "boot_frac_above_margin": 0.0,
+  "boot_frac_below_neg_margin": 0.0,
+  "verdict": "EQUIVALENT",
+  "dAUC_point": 0.010853386676490273,
+  "dAUC_ci90": [
+    0.007037814502840511,
+    0.014883101777066471
+  ]
+}

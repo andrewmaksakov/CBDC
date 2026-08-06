@@ -1,0 +1,310 @@
+{
+  "pilot_seeds": [
+    900001,
+    900002,
+    900003,
+    900004,
+    900005,
+    900006,
+    900007,
+    900008,
+    900009,
+    900010,
+    900011,
+    900012,
+    900013,
+    900014,
+    900015,
+    900016,
+    900017,
+    900018,
+    900019,
+    900020
+  ],
+  "seed_offset": 10000003,
+  "excluded_from_confirmatory": true,
+  "config": {
+    "replicates": 20,
+    "n_train": 8000,
+    "n_test": 10000,
+    "k_star": 500,
+    "tau_delta": 0.5,
+    "tau_did": 0.5,
+    "alpha": 0.1,
+    "r_min": 20,
+    "no_h2": false,
+    "workers": 10
+  },
+  "n_ok": 20,
+  "n_failed": 0,
+  "estimates": {
+    "delta_L3": {
+      "mean": 7.75,
+      "sd": 4.363424536325858,
+      "R_ok": 20,
+      "ci_lo": 6.062900007450879,
+      "ci_hi": 9.437099992549122,
+      "half_width": 1.6870999925491212,
+      "alpha": 0.1
+    },
+    "delta_L0": {
+      "mean": 31.65,
+      "sd": 7.0805515693564285,
+      "R_ok": 20,
+      "ci_lo": 28.9123341138464,
+      "ci_hi": 34.3876658861536,
+      "half_width": 2.737665886153602,
+      "alpha": 0.1
+    },
+    "DiD": {
+      "mean": 23.9,
+      "sd": 7.6770334182718765,
+      "R_ok": 20,
+      "ci_lo": 20.93170688184474,
+      "ci_hi": 26.868293118155258,
+      "half_width": 2.968293118155257,
+      "alpha": 0.1
+    }
+  },
+  "sizing": {
+    "sd_delta": 4.363424536325858,
+    "sd_did": 7.6770334182718765,
+    "tau_delta": 0.5,
+    "tau_did": 0.5,
+    "R_delta": 207,
+    "R_did": 638,
+    "R_min": 20,
+    "h2_confirmatory": true,
+    "R": 638
+  },
+  "resolution_scan": [
+    {
+      "k_star": 50,
+      "k": 50,
+      "L3": {
+        "delta_tp": 0.0,
+        "delta_miss": 0.0,
+        "precision_hi": 1.0,
+        "sat_frac": 1.0,
+        "k": 50
+      },
+      "L0": {
+        "delta_tp": 0.0,
+        "delta_miss": 0.0,
+        "precision_hi": 1.0,
+        "sat_frac": 1.0,
+        "k": 50
+      },
+      "did_miss": 0.0
+    },
+    {
+      "k_star": 100,
+      "k": 100,
+      "L3": {
+        "delta_tp": 0.0,
+        "delta_miss": 0.0,
+        "precision_hi": 1.0,
+        "sat_frac": 1.0,
+        "k": 100
+      },
+      "L0": {
+        "delta_tp": 0.05,
+        "delta_miss": 0.05,
+        "precision_hi": 1.0,
+        "sat_frac": 0.95,
+        "k": 100
+      },
+      "did_miss": 0.05
+    },
+    {
+      "k_star": 200,
+      "k": 200,
+      "L3": {
+        "delta_tp": 0.0,
+        "delta_miss": 0.0,
+        "precision_hi": 1.0,
+        "sat_frac": 1.0,
+        "k": 200
+      },
+      "L0": {
+        "delta_tp": 1.1,
+        "delta_miss": 1.1,
+        "precision_hi": 0.998,
+        "sat_frac": 0.15,
+        "k": 200
+      },
+      "did_miss": 1.1
+    },
+    {
+      "k_star": 300,
+      "k": 300,
+      "L3": {
+        "delta_tp": 0.0,
+        "delta_miss": 0.0,
+        "precision_hi": 0.9998333333333334,
+        "sat_frac": 0.9,
+        "k": 300
+      },
+      "L0": {
+        "delta_tp": 7.2,
+        "delta_miss": 7.2,
+        "precision_hi": 0.9873333333333333,
+        "sat_frac": 0.0,
+        "k": 300
+      },
+      "did_miss": 7.2
+    },
+    {
+      "k_star": 400,
+      "k": 400,
+      "L3": {
+        "delta_tp": 0.55,
+        "delta_miss": 0.55,
+        "precision_hi": 0.9994999999999999,
+        "sat_frac": 0.65,
+        "k": 400
+      },
+      "L0": {
+        "delta_tp": 25.35,
+        "delta_miss": 25.35,
+        "precision_hi": 0.9432500000000001,
+        "sat_frac": 0.0,
+        "k": 400
+      },
+      "did_miss": 24.8
+    },
+    {
+      "k_star": 500,
+      "k": 500,
+      "L3": {
+        "delta_tp": 7.75,
+        "delta_miss": 7.75,
+        "precision_hi": 0.9258000000000001,
+        "sat_frac": 0.0,
+        "k": 500
+      },
+      "L0": {
+        "delta_tp": 31.65,
+        "delta_miss": 31.65,
+        "precision_hi": 0.8441000000000001,
+        "sat_frac": 0.0,
+        "k": 500
+      },
+      "did_miss": 23.9
+    },
+    {
+      "k_star": 625,
+      "k": 625,
+      "L3": {
+        "delta_tp": 11.65,
+        "delta_miss": 11.65,
+        "precision_hi": 0.7667200000000001,
+        "sat_frac": 0.0,
+        "k": 625
+      },
+      "L0": {
+        "delta_tp": 31.25,
+        "delta_miss": 31.25,
+        "precision_hi": 0.7154399999999999,
+        "sat_frac": 0.0,
+        "k": 625
+      },
+      "did_miss": 19.6
+    },
+    {
+      "k_star": 750,
+      "k": 750,
+      "L3": {
+        "delta_tp": 10.6,
+        "delta_miss": 10.6,
+        "precision_hi": 0.6466,
+        "sat_frac": 0.0,
+        "k": 750
+      },
+      "L0": {
+        "delta_tp": 25.9,
+        "delta_miss": 25.9,
+        "precision_hi": 0.6110666666666666,
+        "sat_frac": 0.0,
+        "k": 750
+      },
+      "did_miss": 15.299999999999999
+    },
+    {
+      "k_star": 1000,
+      "k": 1000,
+      "L3": {
+        "delta_tp": 8.4,
+        "delta_miss": 8.4,
+        "precision_hi": 0.49005,
+        "sat_frac": 0.0,
+        "k": 1000
+      },
+      "L0": {
+        "delta_tp": 19.5,
+        "delta_miss": 19.5,
+        "precision_hi": 0.47155,
+        "sat_frac": 0.0,
+        "k": 1000
+      },
+      "did_miss": 11.1
+    },
+    {
+      "k_star": 1250,
+      "k": 1250,
+      "L3": {
+        "delta_tp": 6.85,
+        "delta_miss": 6.85,
+        "precision_hi": 0.39455999999999997,
+        "sat_frac": 0.0,
+        "k": 1250
+      },
+      "L0": {
+        "delta_tp": 14.35,
+        "delta_miss": 14.35,
+        "precision_hi": 0.3826,
+        "sat_frac": 0.0,
+        "k": 1250
+      },
+      "did_miss": 7.5
+    },
+    {
+      "k_star": 1500,
+      "k": 1500,
+      "L3": {
+        "delta_tp": 5.9,
+        "delta_miss": 5.9,
+        "precision_hi": 0.3302333333333334,
+        "sat_frac": 0.0,
+        "k": 1500
+      },
+      "L0": {
+        "delta_tp": 12.65,
+        "delta_miss": 12.65,
+        "precision_hi": 0.32226666666666665,
+        "sat_frac": 0.0,
+        "k": 1500
+      },
+      "did_miss": 6.75
+    },
+    {
+      "k_star": 2000,
+      "k": 2000,
+      "L3": {
+        "delta_tp": 2.75,
+        "delta_miss": 2.75,
+        "precision_hi": 0.24854999999999997,
+        "sat_frac": 0.0,
+        "k": 2000
+      },
+      "L0": {
+        "delta_tp": 9.05,
+        "delta_miss": 9.05,
+        "precision_hi": 0.24450000000000002,
+        "sat_frac": 0.0,
+        "k": 2000
+      },
+      "did_miss": 6.300000000000001
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "comparison": "T4 vs T2 (logit)",
+  "metric": "ap",
+  "delta_margin": 0.03,
+  "alpha": 0.05,
+  "n_boot": 2000,
+  "n_entities": 8000,
+  "n_launderers": 388,
+  "d_point": 0.4366189579587335,
+  "d_ci90": [
+    0.3948273549348477,
+    0.4771084313145576
+  ],
+  "equiv_bound": 0.4771084313145576,
+  "boot_frac_above_margin": 1.0,
+  "boot_frac_below_neg_margin": 0.0,
+  "verdict": "SURVEILLANCE_SUPERIOR"
+}
