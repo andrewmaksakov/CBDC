@@ -1,6 +1,6 @@
 """Driver: regenerates every number in the detection pipeline.
 
-    python3 run_all.py [--seed 20260707] [--n-entities 800] [--delta 0.03]
+    python3 run_all.py [--seed 20260707] [--n-entities 8000] [--delta 0.03]
 
 Order of operations (the audit is a HARD GATE — nothing downstream runs
 if it fails):

@@ -18,12 +18,15 @@ zero marginal value (1.00 → 1.00)" was arithmetically forced. Here:
   (`dgp.py`, the `wallet_counts` line). Laundering is a latent
   multi-step behavior — placement → layering hops across own wallets →
   structured integration — never a single separable marginal.
-* **A pre-registered degeneracy audit** (`degeneracy_audit.py`) runs
+* **A pre-specified degeneracy audit** (`degeneracy_audit.py`) runs
   before any headline number and hard-fails (exit ≠ 0) if ANY single
   feature reaches entity-level AUC > 0.95, or if any marginal is
   class-disjoint. Run it on the old DGP and it fails on `num_wallets`
   at 1.000; run it here and the worst feature sits ≈ 0.84–0.92 across
-  seeds.
+  seeds. ("Pre-specified", not "pre-registered": the audit was fixed in
+  the design pack before any result was generated, but no public
+  timestamped registration exists. A staged OSF registration is planned
+  for the confirmatory protocol — see `grok-frontiers-review/`.)
 
 ## Pipeline
 
@@ -39,8 +42,16 @@ zero marginal value (1.00 → 1.00)" was arithmetically forced. Here:
 | `test_pipeline.py` | regression tests: the audit hard-fails on a reconstruction of the original num_wallets artifact, and passes (num_wallets AUC ≈ 0.5) on the shipped DGP |
 
 **Tiers** (design pack §3): T1 structure-only on unlinked pseudonyms →
-T2 + pseudonymous linkage (ZK-achievable) → T3 + identity attributes →
-T4 + watchlist. The paper's thesis is the equivalence T2 ≈ T4.
+T2 + pseudonymous linkage → T3 + selected KYC/contextual attributes →
+T4 + watchlist bit. The tested claim is the **non-inferiority** of T2 to
+T4 — that withholding the auxiliary block costs at most a tolerated
+amount of detection — not two-sided equivalence, and not a claim about
+access to raw civil identity. T3/T4 expose `kyc_tier`,
+`account_age_days`, `prior_sar_count`, `jurisdiction_risk` and an
+`on_watchlist` bit; they do not expose names, government IDs, or a full
+KYC dossier. No claim is made here that any particular cryptographic
+construction achieves T2: linkage mechanism selection is pending
+co-author engineering review (`grok-frontiers-review/02-dlt-architecture-selection.md`).
 
 **Inference honesty:** folds split on entities (never wallets/tx), the
 effective N reported is the entity count, and every CI comes from an
@@ -57,7 +68,7 @@ Geometric on the ROCm box) — it changes nothing about the harness.
 
 ```bash
 cd detection/
-python3 run_all.py                     # default: seed 20260707, 800 entities, δ=0.03
+python3 run_all.py                     # default: seed 20260707, 8000 entities, δ=0.03
 python3 run_all.py --seed 42           # any seed; all numbers regenerate
 python3 degeneracy_audit.py [seed]     # gate only
 ```
@@ -81,26 +92,61 @@ per tier per model), `oof_{world}.csv` (per-entity out-of-fold scores —
 the TOST input), `degeneracy_audit_{world}.json`,
 `tost_{world}_*.json`, `summary.json`.
 
-## Reference results (seed 20260707, 800 entities, 29 launderers)
+## Reference results (seed 20260707, 8000 entities, 388 launderers)
 
-Default world, gboost, entity-level AUC [95% clustered CI]:
-T1 0.936 [0.849, 0.994] → T2 0.988 [0.967, 0.998] → T3 0.992 → T4 0.992.
-TOST T2 vs T4 (gboost): ΔAUC +0.0043, 90% CI [+0.0004, +0.0101] →
-**EQUIVALENT** at δ = 0.03. The logit model's verdict is INCONCLUSIVE
-(ΔAUC +0.041, CI crosses the margin): identity adds a little value that
-the linear model cannot recover from behavior alone — reported, not
-hidden. Label-permutation control ≈ 0.5. Nothing saturates at 1.000,
-and the linkage step (T1 → T2) carries most of the marginal value — the
-honest version of the paper's claim, on data where it *could* have come
-out otherwise. (At seed 42 all four verdicts are EQUIVALENT.)
+Scaled from 800 to 8000 on 24 Jul: at 800 entities only ~29 launderers
+survive, at which the tiers are not separately identified and every
+verdict is underpowered. All numbers below trace to `results/summary.json`.
 
-That it can come out otherwise is demonstrated, not asserted:
+Default world, entity-level:
+
+| model | metric | T1 | T2 | T3 | T4 |
+|---|---|---|---|---|---|
+| gboost | AUC | 0.9871 | 0.9977 | 0.9979 | 0.9986 |
+| gboost | AP | 0.9119 | 0.9805 | 0.9806 | 0.9849 |
+| logit | AUC | 0.9653 | 0.9812 | 0.9873 | 0.9921 |
+| logit | AP | 0.8507 | 0.8593 | 0.8943 | 0.9218 |
+
+TOST T2 vs T4 at δ = 0.03, with `equiv_bound` = the smallest margin at
+which the comparison would read EQUIVALENT:
+
+| model | metric | Δ | 90% CI | equiv_bound | verdict |
+|---|---|---|---|---|---|
+| gboost | AUC | +0.0009 | [−0.0002, +0.0021] | 0.0021 | EQUIVALENT |
+| gboost | AP | +0.0044 | [−0.0008, +0.0102] | 0.0102 | EQUIVALENT |
+| logit | AUC | +0.0109 | [+0.0070, +0.0149] | 0.0149 | EQUIVALENT |
+| logit | AP | **+0.0625** | [+0.0478, +0.0781] | 0.0781 | **SURVEILLANCE_SUPERIOR** |
+
+**The metric matters more than the margin.** gboost AUC saturates at
+0.998, so an equivalence verdict there is close to automatic and carries
+little information. AP retains resolution under 4.9% prevalence and
+flips the logit verdict: the linear model gains materially from identity
+and watchlist access, the boosted model does not. Read `equiv_bound`
+rather than the verdict — the AP δ = 0.03 is inherited from the AUC
+convention and is not operationally derived. Deriving an operational
+margin is the first item of the Aug-2026 confirmatory protocol.
+
+Linkage (T1 → T2), not identity (T2 → T4), carries most of the gboost
+gain: AP +0.069 vs +0.004. Entity linkage is itself a surveillance
+capability, which the paper says explicitly. Degeneracy gates pass with
+worst single feature `w_frac_fast_mean` at 0.840; label-permutation
+control 0.5129. Nothing saturates at 1.000.
+
+That it could have come out otherwise is demonstrated, not asserted.
 `surveillance_strong` (launderers behaviorally hidden, identity
 attributes genuinely informative, every marginal still audit-clean)
-yields logit T2 0.816 → T4 0.992, TOST verdict
-**SURVEILLANCE_SUPERIOR** (gboost T2 0.925 → T4 0.997, INCONCLUSIVE
-leaning superior). `run_all.py` exits non-zero if this world ever comes
-back all-EQUIVALENT — a rigged-harness self-check.
+returns **SURVEILLANCE_SUPERIOR on all four AP comparisons** — logit
+T2→T4 ΔAP +0.4366, gboost +0.1446 — while the two gboost AUC verdicts
+come back INCONCLUSIVE, again from saturation. `run_all.py` exits
+non-zero if this world ever comes back all-EQUIVALENT: a rigged-harness
+self-check.
+
+⚠️ **These are development results, not confirmatory ones.** The Aug-2026
+prospective protocol (`grok-frontiers-review/01-prospective-protocol-v3.md`
+plus its statistical erratum) designates seed 20260707 pilot-only and
+replaces this endpoint with missed illicit entities at a fixed alert
+budget, estimated on independently generated train/test populations. Do
+not quote the table above as a confirmatory finding.
 
 ## What this does and does not license
 
@@ -128,8 +174,10 @@ not as evidence.
 3. Run the same three commands. The degeneracy audit runs on real data
    too — if a real dataset has a >0.95 single-feature separator, you
    want to know before quoting an AUC.
-4. Pre-register δ before looking at real-data results (design pack §8
-   Q2 — δ = 0.03 is the working default, MF to confirm).
+4. Fix δ before looking at real-data results, and derive it from
+   operational loss (missed illicit entities at a fixed review budget)
+   rather than inheriting the AUC convention. δ = 0.03 is the legacy
+   working default and is **not** operationally justified.
 5. The PET-AML latency sim (`../andrew-cbdc/pet_aml_sim.py`) is a
    separate artifact with two open bugs (escalation ordering, rejection
    calibration — design pack §4.5); it validates the performance
