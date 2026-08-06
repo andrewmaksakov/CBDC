@@ -68,6 +68,13 @@ def test_burned_seed_reuse_refuses():
     _expect(_lock(conf_seed_base=900_001), "burned")
 
 
+def test_oversized_seed_base_refuses():
+    """The bug that killed the first confirmatory attempt: a seed base above
+    sklearn's random_state ceiling. The gate must catch it, not the 20th
+    replicate."""
+    _expect(_lock(conf_seed_base=20_260_805_001), "ceiling")
+
+
 def test_saturated_budget_refuses():
     """The whole point: k*=50 cannot be frozen without an amendment."""
     _expect(_lock(D3_k_star=50), "saturated")

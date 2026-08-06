@@ -53,7 +53,9 @@ PROPOSED = {
     "D24_dlt_mechanism": "PENDING -- Andrew Maksakov, deferred to September 2026",
     "seed_offset": 10_000_003,
     "pilot_seeds_burned": list(range(900_001, 900_021)),
-    "conf_seed_base": 20_260_805_001,
+    # Must stay under sklearn's random_state ceiling (2**32-1). The original
+    # 20260805001 did not, and killed a whole confirmatory attempt.
+    "conf_seed_base": 2_026_080_501,
     "R": None,                  # from the sizing rule once tau/delta* are set
     "signatures": [],           # [{"name": ..., "role": ..., "date": "YYYY-MM-DD"}]
 }
@@ -143,6 +145,20 @@ def validate(lock: dict, *, allow_unsigned=False) -> None:
             f"CONF_SEEDS overlap burned PILOT_SEEDS at {sorted(overlap)[:5]}. "
             "Pilot seeds are excluded from confirmatory analysis permanently "
             "(protocol 6.1 step 3).")
+
+    # Caught the hard way on 6 Aug: conf_seed_base 20260805001 exceeds
+    # sklearn's random_state ceiling, so every confirmatory replicate died with
+    # FAIL_NUM 20 replicates in. replicate.model_seed() now narrows the seed,
+    # but the gate should refuse a lock that cannot execute, not discover it
+    # mid-run.
+    from replicate import SKLEARN_SEED_MAX
+    if base + R > SKLEARN_SEED_MAX:
+        raise LockError(
+            f"conf_seed_base {base} + R {R} exceeds sklearn's random_state "
+            f"ceiling ({SKLEARN_SEED_MAX}). Model seeds are narrowed by "
+            f"replicate.model_seed(), which is deterministic but means the "
+            f"model seed is not the protocol seed. Confirm that is intended, "
+            f"or choose a base below the ceiling.")
 
     if lock.get("D3_k_star", 0) < 300:
         raise LockError(

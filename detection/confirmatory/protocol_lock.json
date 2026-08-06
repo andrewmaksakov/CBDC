@@ -1,0 +1,78 @@
+{
+  "protocol": "v3 + statistical erratum (2026-08-05)",
+  "D1_n_test": 10000,
+  "D2_n_train": 8000,
+  "D3_k_star": 500,
+  "D4_delta_star": null,
+  "D5_prevalence": 0.05,
+  "D6_regime": "mid/mid (default DGP params)",
+  "D7_primary_linkage": "T2-oracle",
+  "D8_ci": "two-sided 90% Student-t for the replicate mean; upper endpoint = U",
+  "D9_alpha": 0.1,
+  "D10_tau_delta": 1.0,
+  "D11_tau_did": 2.5,
+  "D12_R_min": 20,
+  "D13_primary_model": "HistGradientBoostingClassifier(class_weight=balanced)",
+  "D14_contrast_model": "LogisticRegression(max_iter=2000, class_weight=balanced) + StandardScaler",
+  "D15_h2_confirmatory": true,
+  "D17_claim_language": "non-inferiority, never equivalence",
+  "D18_ci_method": "student_t_mean",
+  "D23_registration": "staged public OSF registration; PENDING",
+  "D24_dlt_mechanism": "PENDING -- Andrew Maksakov, deferred to September 2026",
+  "seed_offset": 10000003,
+  "pilot_seeds_burned": [
+    900001,
+    900002,
+    900003,
+    900004,
+    900005,
+    900006,
+    900007,
+    900008,
+    900009,
+    900010,
+    900011,
+    900012,
+    900013,
+    900014,
+    900015,
+    900016,
+    900017,
+    900018,
+    900019,
+    900020
+  ],
+  "conf_seed_base": 2026080501,
+  "R": 52,
+  "signatures": [
+    {
+      "name": "Murad Farzulla",
+      "role": "lead author",
+      "date": "2026-08-06"
+    },
+    {
+      "name": "Andrew Maksakov",
+      "role": "co-author",
+      "date": "2026-08-06",
+      "note": "written deferral - off project until Sep 2026, decisions delegated; D24 remains PENDING"
+    }
+  ],
+  "D4_note": "deliberately unset: pilot puts delta_L3 at 7.75/10k and the H1 verdict turns on delta* not R (U moves only 9.44->8.26 between R=20 and R=200). Reporting the estimate with its interval instead of a verdict contingent on an unargued tolerance.",
+  "sizing_provenance": {
+    "pilot": "20/20 replicates, seeds 900001-900020 (burned)",
+    "sd_delta": 4.363424536325858,
+    "sd_did": 7.6770334182718765,
+    "tau_delta": 1.0,
+    "tau_did": 2.5
+  },
+  "disclosure": "k* and tau were set POST-PILOT, PRE-CONFIRMATORY. Protocol v3 s2.2 permits adjustment after non-confirmatory consultation; the manuscript must state this.",
+  "amendments": [
+    {
+      "date": "2026-08-06",
+      "change": "conf_seed_base 20260805001 -> 2026080501",
+      "reason": "the original base exceeded sklearn's random_state ceiling (2**32-1); every replicate of the first confirmatory attempt died with FAIL_NUM. NO confirmatory results existed at the time of the change and none were discarded. validate() now refuses an out-of-range base up front rather than discovering it mid-run."
+    }
+  ],
+  "written": "2026-08-06",
+  "lock_sha256": "160e9a7762879f76ce43e7ae364b7da6b81310ac56863d19b26b48e13f2a60da"
+}

@@ -39,6 +39,24 @@ PRIMARY_MODEL = "gboost"   # L3 in protocol notation
 CONTRAST_MODEL = "logit"   # L0
 
 
+SKLEARN_SEED_MAX = 2 ** 32 - 1
+
+
+def model_seed(seed: int) -> int:
+    """Narrow a protocol seed into sklearn's `random_state` range.
+
+    numpy's Generator accepts arbitrary ints, but scikit-learn requires
+    random_state in [0, 2**32-1] and raises otherwise. The protocol's
+    confirmatory seeds are dated integers (20260805001...) which exceed that,
+    so the model seed is derived rather than passed through.
+
+    Deterministic and documented, so the run is still reproducible from the
+    protocol seed alone. Only model-internal randomness is affected (HistGBM
+    binning subsample); the DGP still uses the full-width seed.
+    """
+    return int(seed) % (SKLEARN_SEED_MAX + 1)
+
+
 def _numeric_ids(entities) -> np.ndarray:
     """Tie-break key. Entity ids are 'E<i>'; the int is the reproducible key."""
     return entities.entity_id.str.slice(1).astype(int).to_numpy()
@@ -115,7 +133,7 @@ def run_replicate(replicate_id, train_seed, test_seed, *, n_train, n_test,
             rec["models"][model_name] = {}
             for tier in TIERS:
                 cols = TIER_COLS[tier]
-                m = _models(train_seed)[model_name]
+                m = _models(model_seed(train_seed))[model_name]
                 m.fit(tr_ef[cols].to_numpy(dtype=float), y_tr)
                 s = m.predict_proba(te_ef[cols].to_numpy(dtype=float))[:, 1]
                 scores[(model_name, tier)] = s
