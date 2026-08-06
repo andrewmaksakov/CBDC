@@ -10,39 +10,40 @@ Andrew Maksakov — Dissensus AI (Section 5.4, PET-AML stack)
 
 This paper challenges the assumption that comprehensive transaction surveillance is necessary for CBDC financial stability and crime prevention. It proposes an alternative architecture built on anonymized pattern detection, transaction-level intervention, and opt-in deanonymization, and argues that the surveillance–privacy trade-off is weaker than CBDC design documents assume.
 
-## Status (July 2026)
+## Status (August 2026)
 
-The Zenodo record above is the January **v1.1.0** deposit. It predates the merge of
-Section 5.4 (v2.0.0, February) and the July revision passes; a re-deposit is pending.
+`main.tex` on this branch is now the **corrected** manuscript. The February version
+it replaces reported §4.5 "validation" at AUC = 1.000 with watchlist access adding
+zero marginal value. That was a data-generating artifact — launderers were *defined*
+to hold 3–6 wallets against 1–2, so `num_wallets` separated the classes by
+construction, and a saturated denominator made both the "87–95% of surveillance-based
+effectiveness" figure and the "zero marginal improvement" result arithmetically
+forced rather than measured. **Neither claim is supported and neither should be
+cited.** `detection/` is the honest replacement harness.
 
-Two things are in flight and are **not** reflected in the `main.tex` on this branch:
+What replaced them, on 8,000 entities and 388 illicit: the marginal value of
+identity-linked auxiliary information is **model- and metric-dependent**. Average
+precision moves +0.0044 for the boosted model (90% CI [−0.0008, +0.0102]) and
+**+0.0625** for the linear one (CI [+0.0478, +0.0781]), which the equivalence test
+reads as surveillance-superior. Withholding identity is not free; what it costs
+depends on the detector.
 
-1. **Section 4.5 is being rewritten.** The original §4.5 "validation" reported
-   AUC = 1.000 with watchlist access adding zero marginal value. That was a data-generating
-   artifact — launderers were *defined* to hold 3–6 wallets against 1–2, so `num_wallets`
-   separated the classes by construction. `detection/` (below) is the honest replacement
-   harness. The manuscript's headline numbers still quote the old figures until the rewrite
-   lands.
-2. **Positioning pass, 21 July.** The §2.4 gap claim was falsified against a 30-year
-   cryptographic-compliance lineage (trustee e-cash → Compact E-Cash → GGM16 →
-   Platypus/PEReDi → Privacy Pools) plus BIS Aurora/Hertha, and the paper was repositioned
-   around what survives. Full change log and the revised manuscript are on the
-   **`jul2026-working`** branch.
+Also corrected: the degeneracy audit is **pre-specified**, not "pre-registered" (no
+public timestamped registration exists); H.R. 1919 is described as having passed the
+House per Congress.gov, not as enacted legislation.
 
-```bash
-git checkout jul2026-working   # current manuscript + compiled PDF + change logs
-```
+The 21 July positioning pass stands — the §2.4 gap claim was falsified against a
+30-year cryptographic-compliance lineage (trustee e-cash → Compact E-Cash → GGM16 →
+Platypus/PEReDi → Privacy Pools) plus BIS Aurora/Hertha, and the paper repositioned
+around what survives. Item-by-item log in `CHANGES-FOR-ANDREW.md`, bibliography
+rationale in `FORWARD_NOTE.md`, both on `jul2026-working`.
 
-Start there with `WORKING-STATE.md` (where the paper is and what's open), then
-`CHANGES-FOR-ANDREW.md` (the 21 July revision, item by item) and `FORWARD_NOTE.md`
-(why the bibliography was replaced).
-
-Target venue: MDPI *FinTech*, regular track, mid-September.
+Target venue: *Frontiers in Blockchain*, Research Topic on institutional DLT.
 
 ## Repository structure
 
 ```
-main.tex             # LaTeX source (stale February version on main; current on jul2026-working)
+main.tex             # LaTeX source — canonical, corrected August 2026
 references.bib       # bibliography — corrected July 2026, see below
 pet_aml_sim.py       # PET-AML stack simulation (Section 5.4)
 detection/           # Section 4.5 detection-validation pipeline
@@ -53,18 +54,24 @@ detection/           # Section 4.5 detection-validation pipeline
 Self-contained, seeded, and gated. Four evidence tiers (T1 structure-only on unlinked
 pseudonyms → T2 + pseudonymous linkage → T3 + identity attributes → T4 + watchlist), with
 entity-disjoint cross-validation, entity-clustered bootstrap CIs, a label-permutation
-negative control, and a TOST equivalence test for the paper's T2 ≈ T4 claim.
+negative control, and a TOST equivalence test for the T2 vs T4 contrast.
 
-A **pre-registered degeneracy audit** runs before any headline number and hard-fails if any
+A **pre-specified degeneracy audit** runs before any headline number and hard-fails if any
 single feature reaches entity-level AUC > 0.95. Run it against the original DGP and it fails
 on `num_wallets` at 1.000; on the shipped DGP the worst feature sits ≈ 0.84–0.92.
 
 ```bash
 cd detection/
-python3 run_all.py                  # seed 20260707, 800 entities, δ = 0.03 — ≈40 s
+python3 run_all.py                  # seed 20260707, 8000 entities, δ = 0.03
 python3 run_all.py --seed 42        # every number regenerates from the one seed
 python3 test_pipeline.py            # regression tests
 ```
+
+`detection/confirmatory/` holds the prospective pipeline for the operational
+endpoint — missed illicit entities at a fixed alert budget, on independently
+generated train and test populations — with the freeze enforced in code. See
+its README; note that the alert budget originally proposed sits in a saturated
+regime where the test cannot fail, which is why it was not adopted.
 
 Requires Python 3.11+ with `numpy`, `scipy`, `scikit-learn`, `pandas` (developed on 3.14 /
 numpy 2.3.5 / scipy 1.16.3 / sklearn 1.8.0 / pandas 2.3.3). The committed `results/` were
