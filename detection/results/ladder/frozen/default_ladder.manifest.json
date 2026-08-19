@@ -1,0 +1,14 @@
+{
+  "stage": "frozen",
+  "package": "default_ladder",
+  "seed_base": 2026081951,
+  "n_units_planned": 20,
+  "git_commit": "6e96070c2be6a589187bf65a1f053a571acbea2d",
+  "started": "2026-08-19T17:29:53",
+  "python": "3.14.7",
+  "versions": {
+    "sklearn": "1.8.0",
+    "numpy": "2.3.5",
+    "pandas": "2.3.3"
+  }
+}
