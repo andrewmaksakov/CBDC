@@ -131,3 +131,9 @@ and gate thresholds are frozen now.
 - **A1 (19 Aug 2026, pre-pilot):** M1 solver `saga` → `lbfgs`. Rationale: `saga` returned
   ConvergenceWarning at max_iter=5000 on the wallet-level T1 design in the smoke run; `lbfgs`
   optimizes the identical L2 objective deterministically. No result existed when this changed.
+- **A2 (19 Aug 2026, post-pilot, pre-frozen):** surface and prevalence cells upgraded from
+  the two-model reversal pair to the FULL four-rung ladder, under §8's "inclusion of M2/M3
+  on surface cells (compute permitting)". Pilot timing: ~200 s per four-model unit — the
+  full grid costs under an hour of wall time. R values unchanged at protocol defaults
+  (R=20 default ladder, R=10 surface/prevalence, R=2 controls). No frozen-run seed had
+  been consumed when this changed.

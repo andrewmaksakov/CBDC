@@ -72,20 +72,22 @@ def _units(package, stage):
             yield ("mid", "mid", 0.05, N_ENTITIES), all_models, base + i
         return
 
+    # Amendment A2 (19 Aug 2026, post-pilot, pre-frozen): surface and
+    # prevalence run the FULL ladder, not just the reversal pair.
     if package == "surface":
         worlds = [(b, s) for b in ("low", "mid", "high")
                   for s in ("low", "mid", "high") if (b, s) != ("mid", "mid")]
         for b, s in worlds:
             for _ in range(R_SURFACE if stage == "frozen" else 1):
                 i = next(idx)
-                yield (b, s, 0.05, N_ENTITIES), SURFACE_MODELS, base + i
+                yield (b, s, 0.05, N_ENTITIES), all_models, base + i
         return
 
     if package == "prevalence":
         for p in (0.01, 0.03):
             for _ in range(R_SURFACE if stage == "frozen" else 1):
                 i = next(idx)
-                yield ("mid", "mid", p, N_ENTITIES), SURFACE_MODELS, base + i
+                yield ("mid", "mid", p, N_ENTITIES), all_models, base + i
         return
 
     if package == "controls":
