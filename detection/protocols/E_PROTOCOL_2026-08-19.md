@@ -128,4 +128,6 @@ and gate thresholds are frozen now.
 
 ## Amendments
 
-(none yet)
+- **A1 (19 Aug 2026, pre-pilot):** M1 solver `saga` → `lbfgs`. Rationale: `saga` returned
+  ConvergenceWarning at max_iter=5000 on the wallet-level T1 design in the smoke run; `lbfgs`
+  optimizes the identical L2 objective deterministically. No result existed when this changed.
